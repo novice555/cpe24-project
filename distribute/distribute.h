@@ -6,5 +6,12 @@ typedef struct {
     long size;
 } FileSourceDesc;
 typedef FileSourceDesc *FileSource;
-extern FileSource SourceFile[];
-extern int FileCount;
+typedef struct {
+    int count;
+    long sum_size;
+} FileSourcePropertiesDesc;
+typedef FileSourcePropertiesDesc *FileSourceProperties;
+//extern FileSource SourceFile[];
+//extern int FileCount;
+extern void split_file_mode_a(FileSource *Parent, FileSourceProperties ParentCount, FileSource **Child, FileSourceProperties *ChildCount, int ChildNum);
+

@@ -7,15 +7,18 @@
 #include"distribute.h"
 
 
-FileSource fetch_file_detail(char *fullpath);
-void list_file(char *directory)
+FileSource create_filesource(char *fullpath);
+void list_file(char *directory, FileSource *Parent, FileSourceProperties ParentCount)
 {
     DIR *dir;
     struct dirent *ent;
     struct stat st_buf;
     char nextfile[MAX_PATH];
-    int dirlen = strlen(directory);
- //   int count = FileCount;
+    int dirlen;
+    int count;
+
+    dirlen = strlen(directory);
+
     dir = opendir(directory);
     while((ent = readdir(dir))!=NULL)
     {
@@ -33,14 +36,15 @@ void list_file(char *directory)
         strcat(nextfile, ent->d_name);
         stat(nextfile, &st_buf);
         if(S_ISDIR(st_buf.st_mode))
-            list_file(nextfile);
+            list_file(nextfile, Parent, ParentCount);
         else
         {   // printf("%s   ", nextfile);
        // printf("size %d\n", read_file1(nextfile));
-            SourceFile[FileCount] = fetch_file_detail(nextfile);
-            FileCount++;
+            count = ParentCount->count;
+            Parent[count] = create_filesource(nextfile);
+            ParentCount->sum_size += Parent[count]->size;
+            ParentCount->count++;
         }
     }
     closedir(dir);
-   // FileCount = count;
 }
