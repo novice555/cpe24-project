@@ -1,4 +1,4 @@
-#include"distribute.h"
+#include"include/distribute.h"
 #include<string.h>
 #include<stdlib.h>
 void copy_filesource(FileSource b, FileSource a)

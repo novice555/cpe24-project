@@ -4,7 +4,7 @@
 #include<string.h>
 #include<stdio.h>
 #include<stdlib.h>
-#include"distribute.h"
+#include"include/distribute.h"
 
 
 FileSource create_filesource(char *fullpath);

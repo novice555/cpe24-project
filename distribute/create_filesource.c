@@ -1,4 +1,4 @@
-#include"distribute.h"
+#include"include/distribute.h"
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
