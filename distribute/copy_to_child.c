@@ -15,15 +15,15 @@ void copy_to_child(FileSource **Child, FileSourceProperties *ChildCount, int Max
     {
         sprintf(tmpFileName[i], "tmp%d.txt", i+1);
         tmpFile[i] = fopen(tmpFileName[i], "w");
-        n = ChildCount[i]->count;
+        n = ChildCount[i].count;
         for(j=0; j<n; j++)
         {
-            fprintf(tmpFile[i], "%s\n", Child[i][j]->path);
+            fprintf(tmpFile[i], "%s\n", Child[i][j].src);
         }
         fclose(tmpFile[i]);
-        sprintf(dst, "%s0%d", CHILD_PATH, i+1);
-        printf("%s\n", dst);
         strcpy(src, tmpFileName[i]);
+        sprintf(dst, "%s0%d/%s", CHILD_PATH, i+1, Child);
+        printf("%s\n", dst);
         xargs_copy(src, dst);
         remove(tmpFileName[i]);
     }   
