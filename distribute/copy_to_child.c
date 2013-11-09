@@ -3,20 +3,6 @@
 #include"include/distribute.h"
 #include<stdio.h>
 static char CHILD_PATH[] = "/koppae00/child/";
-static int xargs_copy(char *src_list, char *dst)
-{
-    int sys;
-    char strbuf[MAX_PATH] = "";
-    if(system(NULL)==0)
-        exit(EXIT_FAILURE);
-    sprintf(strbuf, "xargs -a %s cp -frt %s", src_list, dst);
-    printf("%s\n", strbuf);
-    sys = system(strbuf);
-    if(sys == 0)
-        fprintf(stderr, "System Execute Error: Code %d.\n", sys);
-    return 0;
-}
-
 void copy_to_child(FileSource **Child, FileSourceProperties *ChildCount, int MaxChild)
 {
     char src[MAX_PATH];
@@ -24,6 +10,7 @@ void copy_to_child(FileSource **Child, FileSourceProperties *ChildCount, int Max
     FILE *tmpFile[MaxChild];
     char tmpFileName[MaxChild][MAX_PATH];
     int i, j, n;
+    check_nfs_child(MaxChild);
     for(i=0; i<MaxChild; i++)
     {
         sprintf(tmpFileName[i], "tmp%d.txt", i+1);
