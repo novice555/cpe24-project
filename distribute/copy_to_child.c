@@ -27,7 +27,7 @@ void copy_to_child(FileSource **Child, FileSourceProperties *ChildCount, int Max
         sprintf(dst, "%s0%d", CHILD_PATH, i+1);
         printf("%s\n", dst);
         rsync_copy(tmpFileName[i], source_path, dst);
-        //remove(tmpFileName[i]);
+        remove(tmpFileName[i]);
     }   
 }
 

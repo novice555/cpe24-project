@@ -4,6 +4,9 @@
 //#include"split_file_mode_a.c"
 int main(int argc, char *argv[])
 {
-    distribute(argv[1], atoi(argv[2]), split_file_mode_a);
+    if(argv[3][0]=='a')
+        distribute(argv[1], atoi(argv[2]), split_file_mode_a);
+    else if(argv[3][0]=='b')
+        distribute(argv[1], atoi(argv[2]), split_file_mode_b);
     return 0;
 }

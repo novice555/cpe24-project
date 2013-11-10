@@ -38,7 +38,7 @@ static void init_dist(int child)
 
 void distribute(char *path, int n_child, void (*split_file)(FileSource*, FileSourceProperties*, FileSource**, FileSourceProperties*, int))
 {
-    int i, j;
+    int i;
     char absolute_path[MAX_PATH];
 
     //create variable store info of file and init FileSourceProperties
