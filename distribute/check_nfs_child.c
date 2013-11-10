@@ -10,11 +10,12 @@ void check_nfs_child(int MaxChild)
     int failed_check = 0;
     for(i=0; i<MaxChild; i++)
     {
-        sprintf(path,"%s/0%d", CHILD_PATH, i+1);
+        sprintf(path,"%s0%d/tmpTest", CHILD_PATH, i+1);
+        //printf("%s\n", path);
         tmpFileTest = fopen(path, "w+");
         if(tmpFileTest == NULL)
         {
-            fprintf(stderr, "Error: Cannot write file to Child %05d\n", i+1);   
+            fprintf(stderr, "Error: Cannot write file to Child %02d\n", i+1);   
             failed_check = 1;
         }
         if(failed_check)

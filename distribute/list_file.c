@@ -51,21 +51,26 @@ void list_file(char *absolute_path, char *relative_path, FileSource *Parent, Fil
         strcpy(nextfile, absolute_path);
         strcat(nextfile, "/");
         strcat(nextfile, ent->d_name);
-        strcpy(nextpath, relative_path);
-        strcat(nextpath, "/");
-        strcat(nextpath, ent->d_name);
-        strcat(nextpath, "/");
+        //printf("%s\n", nextfile);
         stat(nextfile, &st_buf);
         if(S_ISDIR(st_buf.st_mode))
+        {
+            strcpy(nextpath, relative_path);
+            if(strcmp(nextpath, ""))
+                strcat(nextpath, "/");
+            strcat(nextpath, ent->d_name);
+            strcat(nextpath, "/");
             list_file(nextfile, nextpath, Parent, ParentCount);
+        }
         else
         {   // printf("%s   ", nextfile);
        // printf("size %d\n", read_file1(nextfile));
             count = ParentCount[0].count;
             size = file_size(nextfile);
             strcpy(Parent[count].src, nextfile);
-            strcpy(Parent[count].dst_path, nextpath);
+            strcpy(Parent[count].dst_path, relative_path);
             strcpy(Parent[count].filename, ent->d_name);
+            Parent[count].size = size;
             ParentCount[0].sum_size += Parent[count].size;
             ParentCount[0].count++;
         }

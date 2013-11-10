@@ -50,13 +50,13 @@ void distribute(char *path, int n_child, void (*split_file)(FileSource*, FileSou
     printf("Path: %s\n", absolute_path);
     printf("Child: %d\n", n_child);
     //listfile in directory (recursive)
-    list_file(absolute_path, "/", ParentFile, ParentFileCount);         
+    list_file(absolute_path, "", ParentFile, ParentFileCount);         
 
     //function pointer split file to each child
     (*split_file)(ParentFile, ParentFileCount, ChildFile, ChildFileCount, n_child);
 
     //send file to child
-    copy_to_child(ChildFile, ChildFileCount, n_child);  
+    copy_to_child(ChildFile, ChildFileCount, n_child, absolute_path);  
 
     
     //debug
@@ -66,6 +66,7 @@ void distribute(char *path, int n_child, void (*split_file)(FileSource*, FileSou
         printf("[%ld] %s\n", SourceFile[i]->size, SourceFile[i]->path);
     }
     */
+    int a = 0;
     for(i=0; i<n_child; i++)
     {
         printf("=== Child %d [%ld byte] ===\n", i, ChildFileCount[i].sum_size);
@@ -75,7 +76,9 @@ void distribute(char *path, int n_child, void (*split_file)(FileSource*, FileSou
         //{
         //    printf("[%ld] %s\n", ChildFile[i][j]->size, ChildFile[i][j]->path);
         //}
+        a+=ChildFileCount[i].count;
     }
+    printf("Total sum = %d files.\n", a);
     //return 0;
 }
 

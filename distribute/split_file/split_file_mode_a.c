@@ -3,7 +3,7 @@
 #include<stdlib.h>
 static int qsort_cmpfunc(const void *a, const void *b)
 {
-    return (*((FileSource *)b)).size - (*((FileSource *)a)).size;
+    return (*(FileSource **)b)->size - (*(FileSource **)a)->size;
 }
 
 static int min_child(FileSourceProperties *array, int n)
@@ -34,8 +34,11 @@ void split_file_mode_a(FileSource *Parent, FileSourceProperties *ParentCount, Fi
         tmpParent[i] = &Parent[i];                            
     }
 
-    qsort(tmpParent, max_parent, sizeof(FileSource), qsort_cmpfunc);
-    
+    qsort(tmpParent, max_parent, sizeof(FileSource *), qsort_cmpfunc);
+    /*for(i=0; i<max_parent; i++)
+    {
+        printf("%s [%ld]\n", tmpParent[i]->src, tmpParent[i]->size);
+    }*/
     for(i=0; i<max_parent; i++)
     {
         //printf("[%ld] %s\n", tmpParent[i]->size, tmpParent[i]->path);
