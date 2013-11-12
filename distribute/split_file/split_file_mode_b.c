@@ -6,7 +6,7 @@ static int qsort_cmpfunc(const void *a, const void *b)
 {
     const FileSource *x = (*(FileSource **)a);
     const FileSource *y = (*(FileSource **)b);
-    int cmp = strcmp(y->dst_path, x->dst_path);
+    int cmp = strcmp(y->src_path, x->src_path);
     if(cmp==0)
         return y->size - x->size;
     else

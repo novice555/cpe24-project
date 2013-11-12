@@ -44,7 +44,7 @@ void distribute(char *path, int n_child, void (*split_file)(FileSource*, FileSou
     //create variable store info of file and init FileSourceProperties
     init_dist(n_child);
     //fetch realpath
-    //realpath(path, absolute_path);
+    realpath(path, absolute_path);
     strcpy(absolute_path, path);
     
     printf("Path: %s\n", absolute_path);

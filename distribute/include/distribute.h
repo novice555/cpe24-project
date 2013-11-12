@@ -6,9 +6,8 @@ enum {
 };
 
 typedef struct {
-    char src[MAX_PATH];
-    char dst_path[MAX_PATH];
-    char filename[MAX_FILENAME];
+    char *src_path;
+    char *filename;
     long size;
 } FileSource;
 //typedef FileSourceDesc *FileSource;
@@ -29,4 +28,5 @@ void copy_to_child(FileSource **Child, FileSourceProperties *ChildCount, int Max
 void check_nfs_child(int MaxChild);
 int rsync_copy(char *src_list, char *src, char *dst);
 void distribute(char *path, int n_child, void (*split_file)(FileSource*, FileSourceProperties*, FileSource**, FileSourceProperties*, int));
+char* strbuff(char *text);
 

@@ -8,10 +8,10 @@ int rsync_copy(char *src_list, char *src, char *dst)
     char strbuf[MAX_PATH] = "";
 //    FILE *rsync_open;
 //    char buff[512];
-/*
+
     if(system(NULL)==0)
         exit(EXIT_FAILURE);
-*/
+
     sprintf(strbuf, "rsync -as --files-from=%s %s %s", src_list, src, dst);
     printf("%s\n", strbuf);
 //    rsync_open = popen(strbuf, "r");

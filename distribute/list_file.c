@@ -67,9 +67,8 @@ void list_file(char *absolute_path, char *relative_path, FileSource *Parent, Fil
        // printf("size %d\n", read_file1(nextfile));
             count = ParentCount[0].count;
             size = file_size(nextfile);
-            strcpy(Parent[count].src, nextfile);
-            strcpy(Parent[count].dst_path, relative_path);
-            strcpy(Parent[count].filename, ent->d_name);
+            Parent[count].src_path = strbuff(relative_path);
+            Parent[count].filename = strbuff(ent->d_name);
             Parent[count].size = size;
             ParentCount[0].sum_size += Parent[count].size;
             ParentCount[0].count++;
