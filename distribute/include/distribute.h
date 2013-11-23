@@ -1,5 +1,6 @@
 enum {
     MAX_PATH = 2560,
+    MAX_STRING = 1024,
     MAX_FILENAME = 256,
     MAX_NUM_FILE = 100000,
     MAX_CHILD = 100
@@ -26,7 +27,8 @@ extern void split_file_mode_b(FileSource *Parent, FileSourceProperties *ParentCo
 void list_file(char *absolute_path, char *relative_path, FileSource *Parent, FileSourceProperties *ParentCount);
 void copy_to_child(FileSource **Child, FileSourceProperties *ChildCount, int MaxChild, char *source_path);
 void check_nfs_child(int MaxChild);
-int rsync_copy(char *src_list, char *src, char *dst);
+//int rsync_copy(char *src_list, char *src, char *dst);
+void rsync_copy(char cmd[][MAX_STRING], int n);
 void distribute(char *path, int n_child, void (*split_file)(FileSource*, FileSourceProperties*, FileSource**, FileSourceProperties*, int));
 char* strbuff(char *text);
 
