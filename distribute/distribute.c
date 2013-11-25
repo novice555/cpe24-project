@@ -93,7 +93,7 @@ void distribute(char *path, int n_child, void (*split_file)(FileSource*, FileSou
     int a = 0;
     for(i=0; i<n_child; i++)
     {
-        printf("=== Child %d [%ld byte] ===\n", i, ChildFileCount[i].sum_size);
+        printf("=== Child %d [%lld byte] ===\n", i, ChildFileCount[i].sum_size);
         printf("Total %d files.\n", ChildFileCount[i].count);
         //int count = ChildFileCount[i]->count;
         //for(j=0; j<count; j++)

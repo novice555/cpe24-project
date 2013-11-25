@@ -36,6 +36,7 @@ void copy_to_child(FileSource **Child, FileSourceProperties *ChildCount, int Max
             tmpFileName[i], source_path, dst);
 
     }
+    
     rsync_copy(command, MaxChild);
     for(i=0; i<MaxChild; i++)
     {
@@ -46,5 +47,6 @@ void copy_to_child(FileSource **Child, FileSourceProperties *ChildCount, int Max
             exit(1);
         }
     }
+    
 }
 

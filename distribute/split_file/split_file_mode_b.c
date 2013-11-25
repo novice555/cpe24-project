@@ -17,7 +17,7 @@ static int min_child(FileSourceProperties *array, int n)
 {
     int i;
     int min_no = 0;
-    long min = array[min_no].sum_size;
+    long long min = array[min_no].sum_size;
     for(i=1; i<n; i++)
     {
         if(array[i].sum_size < min)

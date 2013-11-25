@@ -25,11 +25,11 @@ static long file_size(char *fullpath)
     return size;
 }
 */
-static long file_size(char *path)
+static long long file_size(char *path)
 {
     struct stat st;
     stat(path, &st);
-    return (long) st.st_size;
+    return (long long) st.st_size;
 }
 //static int kuy = 0;
 

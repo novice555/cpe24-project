@@ -9,12 +9,12 @@ enum {
 typedef struct {
     char *src_path;
     char *filename;
-    long size;
+    long long size;
 } FileSource;
 //typedef FileSourceDesc *FileSource;
 typedef struct {
     int count;
-    long sum_size;
+    long long sum_size;
 } FileSourceProperties;
 //typedef FileSourcePropertiesDesc *FileSourceProperties;
 
