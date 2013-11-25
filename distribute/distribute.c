@@ -35,6 +35,28 @@ static void init_dist(int child)
         ChildFileCount[i].sum_size = 0;
     }
 }
+static void deinit_dist(int child)
+{
+    int i;
+    int ParentMax = ParentFileCount[0].count;
+    for(i=0; i<ParentMax; i++)
+    {
+        if(ParentFile[i].src_path!=NULL)
+            free(ParentFile[i].src_path);
+        if(ParentFile[i].filename!=NULL)
+            free(ParentFile[i].filename);
+    }
+    free(ParentFile);
+    free(ParentFileCount);
+    
+    for(i=0; i<child; i++)
+    {
+        free(ChildFile[i]);
+    }
+    
+    free(ChildFile);
+    free(ChildFileCount);
+}
 
 void distribute(char *path, int n_child, void (*split_file)(FileSource*, FileSourceProperties*, FileSource**, FileSourceProperties*, int))
 {
@@ -45,12 +67,14 @@ void distribute(char *path, int n_child, void (*split_file)(FileSource*, FileSou
     init_dist(n_child);
     //fetch realpath
     realpath(path, absolute_path);
-    strcpy(absolute_path, path);
+    strcpy(path, absolute_path);
+    if(path[strlen(path)-1]!='/')
+        strcat(absolute_path, "/");
     
     printf("Path: %s\n", absolute_path);
     printf("Child: %d\n", n_child);
     //listfile in directory (recursive)
-    list_file(absolute_path, "", ParentFile, ParentFileCount);         
+    list_file(absolute_path, "./", ParentFile, ParentFileCount);         
 
     //function pointer split file to each child
     (*split_file)(ParentFile, ParentFileCount, ChildFile, ChildFileCount, n_child);
@@ -79,6 +103,8 @@ void distribute(char *path, int n_child, void (*split_file)(FileSource*, FileSou
         a+=ChildFileCount[i].count;
     }
     printf("Total sum = %d files.\n", a);
+
+    deinit_dist(n_child);
     //return 0;
 }
 

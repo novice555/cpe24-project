@@ -27,8 +27,8 @@ void copy_to_child(FileSource **Child, FileSourceProperties *ChildCount, int Max
         n = ChildCount[i].count;
         for(j=0; j<n; j++)
         {
-            fprintf(tmpFile[i], "%s\n", \
-                strcat(Child[i][j].src_path, Child[i][j].filename));
+            fprintf(tmpFile[i], "%s%s\n", \
+                Child[i][j].src_path, Child[i][j].filename);
         }
         fclose(tmpFile[i]);
         sprintf(dst, "%s%02d", CHILD_PATH, i+1);

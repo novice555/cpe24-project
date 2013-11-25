@@ -1,1 +1,1 @@
-gcc -Wall -ggdb -o distribute *.c split_file/*.c -lpthread
+gcc -Wall -ggdb -o distribute *.c split_file/*.c -lpthread $1

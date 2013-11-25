@@ -5,7 +5,7 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include"include/distribute.h"
-
+/*
 static long file_size(char *fullpath)
 {
 
@@ -24,6 +24,14 @@ static long file_size(char *fullpath)
     }
     return size;
 }
+*/
+static long file_size(char *path)
+{
+    struct stat st;
+    stat(path, &st);
+    return (long) st.st_size;
+}
+//static int kuy = 0;
 
 void list_file(char *absolute_path, char *relative_path, FileSource *Parent, FileSourceProperties *ParentCount)
 {
@@ -39,27 +47,27 @@ void list_file(char *absolute_path, char *relative_path, FileSource *Parent, Fil
     dir = opendir(absolute_path);
     while((ent = readdir(dir))!=NULL)
     {
+        //kuy++;
+
         if(strcmp(ent->d_name, "..") == 0 || strcmp(ent->d_name, ".") == 0)
         {
             continue;
         }
-        if((dirlen + strlen(ent->d_name)) > MAX_PATH)
+        if((dirlen + strlen(ent->d_name)) > MAX_PATH - 1)
         {
             fprintf(stderr,"Absolute path is too long: %s/%s", absolute_path, ent->d_name);
             return;
         }
         strcpy(nextfile, absolute_path);
-        strcat(nextfile, "/");
         strcat(nextfile, ent->d_name);
         //printf("%s\n", nextfile);
         stat(nextfile, &st_buf);
         if(S_ISDIR(st_buf.st_mode))
         {
             strcpy(nextpath, relative_path);
-            if(strcmp(nextpath, ""))
-                strcat(nextpath, "/");
             strcat(nextpath, ent->d_name);
             strcat(nextpath, "/");
+            strcat(nextfile, "/");
             list_file(nextfile, nextpath, Parent, ParentCount);
         }
         else
@@ -67,8 +75,9 @@ void list_file(char *absolute_path, char *relative_path, FileSource *Parent, Fil
        // printf("size %d\n", read_file1(nextfile));
             count = ParentCount[0].count;
             size = file_size(nextfile);
-            Parent[count].src_path = strbuff(relative_path);
-            Parent[count].filename = strbuff(ent->d_name);
+            //printf("%d\n", kuy);
+            Parent[count].src_path = strbuff(relative_path, strlen(relative_path) + 1);
+            Parent[count].filename = strbuff(ent->d_name, strlen(ent->d_name) + 1);
             Parent[count].size = size;
             ParentCount[0].sum_size += Parent[count].size;
             ParentCount[0].count++;
