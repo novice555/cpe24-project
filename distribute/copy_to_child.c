@@ -37,7 +37,7 @@ void copy_to_child(FileSource **Child, FileSourceProperties *ChildCount, int Max
 
     }
     
-    rsync_copy(command, MaxChild);
+    //rsync_copy(command, MaxChild);
     for(i=0; i<MaxChild; i++)
     {
         if(remove(tmpFileName[i])!=0)
