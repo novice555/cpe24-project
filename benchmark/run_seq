@@ -1,0 +1,1 @@
+/usr/bin/ssh -p22222 root@192.168.1.11 bash /alone_koppae/diff_script.sh

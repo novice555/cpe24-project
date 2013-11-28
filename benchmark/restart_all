@@ -1,0 +1,4 @@
+ssh -p22222 root@192.168.1.11 shutdown -r now
+ssh -p22222 root@192.168.1.12 shutdown -r now
+ssh -p22222 root@192.168.1.13 shutdown -r now
+ssh -p22222 root@192.168.1.14 shutdown -r now
