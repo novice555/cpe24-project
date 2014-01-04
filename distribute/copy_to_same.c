@@ -3,7 +3,7 @@
 #include"include/distribute.h"
 #include<stdio.h>
 static char CHILD_PATH[] = "/koppae00/child/";
-void copy_to_child(FileSource **Child, FileSourceProperties *ChildCount, int MaxChild, char *source_path)
+void copy_to_same(FileSource *ChildSame, FileSourceProperties *ChildSameCount, int MaxChild, char *source_path)
 {
     char dst[MAX_PATH];
     FILE *tmpFile[MaxChild];
@@ -24,14 +24,14 @@ void copy_to_child(FileSource **Child, FileSourceProperties *ChildCount, int Max
                 tmpFileName[i]);
             exit(1);
         }
-        n = ChildCount[i].count;
+        n = ChildSameCount[0].count;
         for(j=0; j<n; j++)
         {
             fprintf(tmpFile[i], "%s%s\n", \
-                Child[i][j].src_path, Child[i][j].filename);
+                ChildSame[j].src_path, ChildSame[j].filename);
         }
         fclose(tmpFile[i]);
-        sprintf(dst, "%s%02d/dynamic", CHILD_PATH, i+1);
+        sprintf(dst, "%s%02d/static", CHILD_PATH, i+1);
         sprintf(command[i], "rsync -as --files-from=%s %s %s\n", \
             tmpFileName[i], source_path, dst);
 

@@ -38,17 +38,22 @@ static int min_child(FileSourceProperties *array, int n)
     return min_no;
 }
 
-void split_file_mode_b(int ChildNum, int Same, FileSource *Parent, FileSourceProperties *ParentCount, FileSource **Child, FileSourceProperties *ChildCount)
+void split_file_mode_c(int ChildNum, int Same, FileSource *Parent, FileSourceProperties *ParentCount, FileSource **Child, FileSourceProperties *ChildCount, FileSource *ChildSame, FileSourceProperties *ChildSameCount)
 {
-    int i;
+    int i, count;
     int max_parent = ParentCount[0].count;
     int child_min_no = 0;
     int child_min_count;
+    long long max_childsize = (long long) (Same/100.0)*ParentCount[0].sum_size;
+    long long childsize;
     FileSource *tmpParent[max_parent];
+    
     for(i=0; i<max_parent; i++)
     {
         tmpParent[i] = &Parent[i];                            
     }
+
+    
 
     qsort(tmpParent, max_parent, sizeof(FileSource *), qsort_cmpfunc);
     /*
@@ -57,15 +62,25 @@ void split_file_mode_b(int ChildNum, int Same, FileSource *Parent, FileSourcePro
         printf("%s [%ld]\n", tmpParent[i]->src, tmpParent[i]->size);
     }
     */
-    for(i=0; i<max_parent; i++)
+    count = 0;
+    childsize = 0;
+    while(childsize<max_childsize)
     {
         //printf("[%ld] %s\n", tmpParent[i]->size, tmpParent[i]->path);
         child_min_no = min_child(ChildCount, ChildNum);
         child_min_count = ChildCount[child_min_no].count;
-        Child[child_min_no][child_min_count] = *tmpParent[i];
+        Child[child_min_no][child_min_count] = *tmpParent[count];
         ChildCount[child_min_no].count++;
-        ChildCount[child_min_no].sum_size += tmpParent[i]->size;
-    }    
+        ChildCount[child_min_no].sum_size += tmpParent[count]->size;
+        childsize += tmpParent[count]->size; count++;
+    }
+    
+    for(i=count; i<max_parent; i++)
+    {
+        ChildSame[i-count] = *tmpParent[i];
+        ChildSameCount[0].count++;
+        ChildSameCount[0].sum_size += tmpParent[i]->size;
+    }
     
 }
 

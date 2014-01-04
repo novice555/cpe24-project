@@ -1,0 +1,39 @@
+nohup: ignoring input
+Path: /koppae00/project2/
+Child: 4
+rsync -as --files-from=/tmp/tmp01.txt /koppae00/project2/ /koppae00/child/01
+rsync -as --files-from=/tmp/tmp02.txt /koppae00/project2/ /koppae00/child/02
+rsync -as --files-from=/tmp/tmp03.txt /koppae00/project2/ /koppae00/child/03
+rsync -as --files-from=/tmp/tmp04.txt /koppae00/project2/ /koppae00/child/04
+=== Child 0 [6171174323 byte] ===
+Total 71343 files.
+=== Child 1 [6171173478 byte] ===
+Total 71347 files.
+=== Child 2 [6171173557 byte] ===
+Total 71347 files.
+=== Child 3 [6171175548 byte] ===
+Total 71349 files.
+Total sum = 285386 files.
+	Command being timed: "./distribute_32bits project2/ 4 b"
+	User time (seconds): 402.83
+	System time (seconds): 925.08
+	Percent of CPU this job got: 12%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 2:57:22
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 95088
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 15
+	Minor (reclaiming a frame) page faults: 21543
+	Voluntary context switches: 7621294
+	Involuntary context switches: 2802775
+	Swaps: 0
+	File system inputs: 49624032
+	File system outputs: 49406824
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0

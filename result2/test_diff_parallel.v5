@@ -1,0 +1,119 @@
+Process "ssh -p22222 root@192.168.1.11 bash /koppae01/diff_script.sh" started
+Process "ssh -p22222 root@192.168.1.12 bash /koppae02/diff_script.sh" started
+Process "ssh -p22222 root@192.168.1.13 bash /koppae03/diff_script.sh" started
+Process "ssh -p22222 root@192.168.1.14 bash /koppae04/diff_script.sh" started
+	Command being timed: "find /koppae04/child04 -name *.txt -exec diff /koppae04/test.input {} ;"
+	User time (seconds): 53.56
+	System time (seconds): 65.70
+	Percent of CPU this job got: 12%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 15:57.46
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 20208
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 15
+	Minor (reclaiming a frame) page faults: 22083710
+	Voluntary context switches: 343466
+	Involuntary context switches: 2980
+	Swaps: 0
+	File system inputs: 12347856
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0
+	Command being timed: "find /koppae01/child01 -name *.txt -exec diff /koppae01/test.input {} ;"
+	User time (seconds): 54.63
+	System time (seconds): 67.39
+	Percent of CPU this job got: 11%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 16:57.13
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 47328
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 16
+	Minor (reclaiming a frame) page faults: 22012055
+	Voluntary context switches: 343387
+	Involuntary context switches: 2919
+	Swaps: 0
+	File system inputs: 12348104
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0
+	Command being timed: "find /koppae02/child02 -name *.txt -exec diff /koppae02/test.input {} ;"
+	User time (seconds): 54.48
+	System time (seconds): 66.45
+	Percent of CPU this job got: 10%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 19:08.21
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 20208
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 15
+	Minor (reclaiming a frame) page faults: 21941080
+	Voluntary context switches: 343513
+	Involuntary context switches: 2853
+	Swaps: 0
+	File system inputs: 12348072
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0
+	Command being timed: "find /koppae03/child03 -name *.txt -exec diff /koppae03/test.input {} ;"
+	User time (seconds): 53.36
+	System time (seconds): 65.59
+	Percent of CPU this job got: 10%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 19:43.22
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 19648
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 15
+	Minor (reclaiming a frame) page faults: 22012030
+	Voluntary context switches: 343527
+	Involuntary context switches: 2952
+	Swaps: 0
+	File system inputs: 12347904
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0
+	Command being timed: "./parallel_commands.sh run_parallel"
+	User time (seconds): 0.26
+	System time (seconds): 0.03
+	Percent of CPU this job got: 0%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 19:47.15
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 10368
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 3734
+	Voluntary context switches: 135
+	Involuntary context switches: 46
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 40
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0

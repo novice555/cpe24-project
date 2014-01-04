@@ -11,6 +11,8 @@ static FileSource *ParentFile;
 static FileSourceProperties *ParentFileCount;
 static FileSource **ChildFile;
 static FileSourceProperties *ChildFileCount;
+static FileSource *ChildSameFile;
+static FileSourceProperties *ChildSameFileCount;
 
 //Function init file
 
@@ -19,21 +21,26 @@ static void init_dist(int child)
     int i;
     ParentFile = malloc(MAX_NUM_FILE * sizeof(FileSource));
     ChildFile = malloc(child * sizeof(FileSource*));
+    ChildSameFile = malloc(MAX_NUM_FILE * sizeof(FileSource));
     for(i=0; i<child; i++)
     {
         ChildFile[i] = malloc(MAX_NUM_FILE * sizeof(FileSource));
     }
     ParentFileCount = malloc(sizeof(FileSourceProperties));
     ChildFileCount = malloc(child * sizeof(FileSourceProperties));
+    ChildSameFileCount = malloc(sizeof(FileSourceProperties));
     
     //initialize variable
     ParentFileCount[0].count = 0;
     ParentFileCount[0].sum_size = 0;
+    ChildSameFileCount[0].count =0;
+    ChildSameFileCount[0].sum_size = 0;
     for(i=0; i<child; i++)
     {                
         ChildFileCount[i].count = 0;
         ChildFileCount[i].sum_size = 0;
     }
+    
 }
 static void deinit_dist(int child)
 {
@@ -48,6 +55,8 @@ static void deinit_dist(int child)
     }
     free(ParentFile);
     free(ParentFileCount);
+    free(ChildSameFile);
+    free(ChildSameFileCount);
     
     for(i=0; i<child; i++)
     {
@@ -58,7 +67,7 @@ static void deinit_dist(int child)
     free(ChildFileCount);
 }
 
-void distribute(char *path, int n_child, void (*split_file)(FileSource*, FileSourceProperties*, FileSource**, FileSourceProperties*, int))
+void distribute(char *path, int n_child, int n_same, void (*split_file)(int, int, FileSource*, FileSourceProperties*, FileSource**, FileSourceProperties*, FileSource*, FileSourceProperties*))
 {
     int i;
     char absolute_path[MAX_PATH];
@@ -77,11 +86,14 @@ void distribute(char *path, int n_child, void (*split_file)(FileSource*, FileSou
     list_file(absolute_path, "./", ParentFile, ParentFileCount);         
 
     //function pointer split file to each child
-    (*split_file)(ParentFile, ParentFileCount, ChildFile, ChildFileCount, n_child);
+    (*split_file)(n_same, n_child, ParentFile, ParentFileCount, ChildFile, ChildFileCount, ChildSameFile, ChildSameFileCount);
 
     //send file to child
     copy_to_child(ChildFile, ChildFileCount, n_child, absolute_path);  
-
+    if(n_same>0)
+    {
+        copy_to_same(ChildSameFile, ChildSameFileCount, n_child, absolute_path);
+    }
     
     //debug
     /*

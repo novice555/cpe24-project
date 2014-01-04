@@ -22,7 +22,7 @@ static int min_child(FileSourceProperties *array, int n)
     return min_no;
 }
 
-void split_file_mode_a(FileSource *Parent, FileSourceProperties *ParentCount, FileSource **Child, FileSourceProperties *ChildCount, int ChildNum)
+void split_file_mode_a(int ChildNum, int Same, FileSource *Parent, FileSourceProperties *ParentCount, FileSource **Child, FileSourceProperties *ChildCount)
 {
     int i;
     int max_parent = ParentCount[0].count;

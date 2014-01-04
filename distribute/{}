@@ -1,0 +1,9 @@
+distribute.c: In function ‘deinit_dist’:
+distribute.c:49:9: warning: unused variable ‘ChildSameMax’ [-Wunused-variable]
+distribute.c: In function ‘distribute’:
+distribute.c:96:9: warning: implicit declaration of function ‘copy_to_same’ [-Wimplicit-function-declaration]
+main.c: In function ‘main’:
+main.c:8:9: warning: passing argument 4 of ‘distribute’ from incompatible pointer type [enabled by default]
+include/distribute.h:32:6: note: expected ‘void (*)(int,  int,  struct FileSource *, struct FileSourceProperties *, struct FileSource **, struct FileSourceProperties *, struct FileSource *, struct FileSourceProperties *)’ but argument is of type ‘void (*)(int,  int,  struct FileSource *, struct FileSourceProperties *, struct FileSource **, struct FileSourceProperties *)’
+main.c:10:9: warning: passing argument 4 of ‘distribute’ from incompatible pointer type [enabled by default]
+include/distribute.h:32:6: note: expected ‘void (*)(int,  int,  struct FileSource *, struct FileSourceProperties *, struct FileSource **, struct FileSourceProperties *, struct FileSource *, struct FileSourceProperties *)’ but argument is of type ‘void (*)(int,  int,  struct FileSource *, struct FileSourceProperties *, struct FileSource **, struct FileSourceProperties *)’
