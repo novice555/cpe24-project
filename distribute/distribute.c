@@ -67,10 +67,11 @@ static void deinit_dist(int child)
     free(ChildFileCount);
 }
 
-void distribute(char *path, int n_child, int n_same, void (*split_file)(int, int, FileSource*, FileSourceProperties*, FileSource**, FileSourceProperties*, FileSource*, FileSourceProperties*))
+void distribute(char *path, int n_child, int n_same, void (*split_file)(int, int, void*))
 {
     int i;
     char absolute_path[MAX_PATH];
+    CompactSource Compact;
 
     //create variable store info of file and init FileSourceProperties
     init_dist(n_child);
@@ -85,9 +86,18 @@ void distribute(char *path, int n_child, int n_same, void (*split_file)(int, int
     //listfile in directory (recursive)
     list_file(absolute_path, "./", ParentFile, ParentFileCount);         
 
-    //function pointer split file to each child
-    (*split_file)(n_same, n_child, ParentFile, ParentFileCount, ChildFile, ChildFileCount, ChildSameFile, ChildSameFileCount);
+    //compact Source and pass to split_file
+    Compact.in = ParentFile;
+    Compact.in_count = ParentFileCount;
+    Compact.out = ChildFile;
+    Compact.out_count = ChildFileCount;
+    Compact.outsame = ChildSameFile;
+    Compact.outsame_count = ChildSameFileCount;
 
+    //function pointer split file to each child
+    //(*split_file)(n_same, n_child, ParentFile, ParentFileCount, ChildFile, ChildFileCount, ChildSameFile, ChildSameFileCount);
+    (*split_file)(n_same, n_child, &Compact);
+    
     //send file to child
     copy_to_child(ChildFile, ChildFileCount, n_child, absolute_path);  
     if(n_same>0)

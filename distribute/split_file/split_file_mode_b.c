@@ -38,8 +38,13 @@ static int min_child(FileSourceProperties *array, int n)
     return min_no;
 }
 
-void split_file_mode_b(int ChildNum, int Same, FileSource *Parent, FileSourceProperties *ParentCount, FileSource **Child, FileSourceProperties *ChildCount)
+void split_file_mode_b(int ChildNum, int Same, void *src)
 {
+    CompactSource *decompact = (CompactSource *) src;
+    FileSrc1D Parent = decompact->in;
+    FileDesc1D ParentCount = decompact->in_count;
+    FileSrc2D Child = decompact->out;
+    FileDesc1D ChildCount = decompact->out_count;
     int i;
     int max_parent = ParentCount[0].count;
     int child_min_no = 0;
