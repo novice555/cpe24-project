@@ -2,5 +2,5 @@
 
 int main(int argc, char *argv[])
 {
-    load_koppae(argc, argv);
+    load(argc, argv);
 }

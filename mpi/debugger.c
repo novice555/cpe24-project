@@ -6,6 +6,5 @@ void debugger()
     gethostname(hostname, sizeof(hostname));
     printf("PID %d on %s ready for attach\n", getpid(), hostname);
     fflush(stdout);
-    while (0 == i)
-        sleep(5);
+    sleep(10);
 }
