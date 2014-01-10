@@ -3,45 +3,70 @@
 #include<limits.h>
 #include<string.h>
 #include"include/distribute.h"
+void enqueue(FileDesc desc, struct FileSource src);
+struct FileSource dequeue(FileDesc desc);
 
 
-//Variable store detail of each file.
+//variabl
 
-static FileSource *ParentFile;
-static FileSourceProperties *ParentFileCount;
-static FileSource **ChildFile;
-static FileSourceProperties *ChildFileCount;
-static FileSource *ChildSameFile;
-static FileSourceProperties *ChildSameFileCount;
 
 //Function init file
 
-static void init_dist(int child)
+static void dist_init(int child, void *src)
 {
     int i;
-    ParentFile = malloc(MAX_NUM_FILE * sizeof(FileSource));
-    ChildFile = malloc(child * sizeof(FileSource*));
-    ChildSameFile = malloc(MAX_NUM_FILE * sizeof(FileSource));
+    char *first = "FIRST";
+    CompactSrc *decompact = (CompactSrc *) src;
+    FileDesc Parent = decompact->in;
+    FileDesc *Child = decompact->out;
+    FileDesc Same = decompact->same;
+    FileDesc Queue = decompact->queue;
+    
+    Parent = malloc(sizeof(struct FileSourceProperties));
+    Parent->count = 0;
+    Parent->sum_size = 0;
+    Parent->head = malloc(sizeof(struct FileSource));
+    Parent->head->filename = strbuff(first, strlen(first));
+    Parent->head->next = NULL;
+    Parent->head->back = NULL;
+    Parent->tail = Parent->head;
+
+    Same = malloc(sizeof(struct FileSourceProperties));
+    Same->count = 0;
+    Same->sum_size = 0;
+    Same->head = malloc(sizeof(struct FileSource));
+    Same->head->filename = strbuff(first, strlen(first));
+    Same->head->next = NULL;
+    Same->head->back = NULL;
+    Same->tail = Same->head;
+    
+    Queue = malloc(sizeof(struct FileSourceProperties));
+    Queue->count = 0;
+    Queue->sum_size = -1;
+    Queue->head = malloc(sizeof(struct FileSource));
+    Queue->head->filename = strbuff(first, strlen(first));
+    Queue->head->next = NULL;
+    Queue->head->back = NULL;
+    Queue->tail = Queue->head;
+    
+    Child = malloc(child*sizeof(FileDesc));
     for(i=0; i<child; i++)
     {
-        ChildFile[i] = malloc(MAX_NUM_FILE * sizeof(FileSource));
+        Child[i] = malloc(sizeof(struct FileSourceProperties));
+        Child[i]->count = 0;
+        Child[i]->sum_size = 0;
+        Child[i]->head = malloc(sizeof(struct FileSource));
+        Child[i]->head->filename = strbuff(first, strlen(first));
+        Child[i]->head->next = NULL;
+        Child[i]->head->back = NULL;
+        Child[i]->tail = Child[i]->head;
     }
-    ParentFileCount = malloc(sizeof(FileSourceProperties));
-    ChildFileCount = malloc(child * sizeof(FileSourceProperties));
-    ChildSameFileCount = malloc(sizeof(FileSourceProperties));
-    
-    //initialize variable
-    ParentFileCount[0].count = 0;
-    ParentFileCount[0].sum_size = 0;
-    ChildSameFileCount[0].count =0;
-    ChildSameFileCount[0].sum_size = 0;
-    for(i=0; i<child; i++)
-    {                
-        ChildFileCount[i].count = 0;
-        ChildFileCount[i].sum_size = 0;
-    }
-    
+    decompact->queue = Queue;
+    decompact->in = Parent;
+    decompact->out = Child;
+    decompact->same = Same;
 }
+/*
 static void deinit_dist(int child)
 {
     int i;
@@ -66,16 +91,29 @@ static void deinit_dist(int child)
     free(ChildFile);
     free(ChildFileCount);
 }
+*/
 
 void distribute(char *path, int n_child, int n_same, void (*split_file)(int, int, void*))
 {
-    int i;
+    int i, len;
+    long long total_count, total_size;
     char absolute_path[MAX_PATH];
-    CompactSource Compact;
-
+    struct CompactSource compact;
+    struct FileSource work, tmp_queue;
+    FileDesc Parent;
+    FileDesc *Child;
+    FileDesc Same;
+    FileDesc Queue; 
+    
     //create variable store info of file and init FileSourceProperties
-    init_dist(n_child);
+    string_init();
+    dist_init(n_child, &compact);
     //fetch realpath
+    Parent = compact.in;
+    Child = compact.out;
+    Same = compact.same;
+    Queue = compact.queue;
+
     realpath(path, absolute_path);
     strcpy(path, absolute_path);
     if(path[strlen(path)-1]!='/')
@@ -83,8 +121,49 @@ void distribute(char *path, int n_child, int n_same, void (*split_file)(int, int
     
     printf("Path: %s\n", absolute_path);
     printf("Child: %d\n", n_child);
-    //listfile in directory (recursive)
-    list_file(absolute_path, "./", ParentFile, ParentFileCount);         
+
+    work.filename = strbuff(absolute_path, strlen(absolute_path));
+    work.src_path = NULL;
+    work.size = -1;
+    work.next = NULL;
+    work.back = NULL;
+    enqueue(Queue, work);
+    //listfile in directory
+    total_count = 0;
+    total_size = 0;
+    while(Queue->head->next!=NULL)
+    {
+        printf("%s\n", Queue->head->next->filename);
+        tmp_queue = dequeue(Queue);
+        list_file(tmp_queue.filename, absolute_path, &compact);        
+        total_count += Parent->count;
+        total_size += Parent->sum_size;
+        (*split_file)(n_child, n_same, &compact);
+        //Parent->count = 0;
+        //Parent->sum_size = 0;
+    }
+    
+    copy_to_child(absolute_path, n_child, 0, &compact);
+    
+    if(!(n_same>=100))
+    {
+        copy_to_child(absolute_path, n_child, 1, &compact);  
+        write_same_list(Same, n_child);
+    }
+    
+/*
+    //debug
+    
+    FileSrc A;
+    A = Child[0]->head->next;
+    
+    while(A!=NULL)
+    {
+        printf("[%lld] %s%s\n", A->size, A->src_path, A->filename);
+        A = A->next;
+    } 
+    
+    printf("[%lld] Total = %d Files\n", Parent->sum_size, Parent->count);
 
     //compact Source and pass to split_file
     Compact.in = ParentFile;
@@ -99,34 +178,39 @@ void distribute(char *path, int n_child, int n_same, void (*split_file)(int, int
     (*split_file)(n_same, n_child, &Compact);
     
     //send file to child
-    copy_to_child(ChildFile, ChildFileCount, n_child, absolute_path);  
-    if(n_same>0)
-    {
-        copy_to_same(ChildSameFile, ChildSameFileCount, n_child, absolute_path);
-    }
     
     //debug
-    /*
+    
     for(i=0; i<FileCount ;i++)
     {
         printf("[%ld] %s\n", SourceFile[i]->size, SourceFile[i]->path);
     }
-    */
+*/
+    
+    printf("\n*********Summary********\n\n");
+    printf("Percent: %d/%d\n", n_same, 100 - n_same);
+    printf("=== Parent [%lld byte] ===\n", Parent->sum_size);
+    printf("Total %d files.\n", Parent->count);
     int a = 0;
     for(i=0; i<n_child; i++)
     {
-        printf("=== Child %d [%lld byte] ===\n", i, ChildFileCount[i].sum_size);
-        printf("Total %d files.\n", ChildFileCount[i].count);
+        printf("=== Child %d [%lld byte] ===\n", i, Child[i]->sum_size);
+        printf("Total %d files.\n", Child[i]->count);
         //int count = ChildFileCount[i]->count;
         //for(j=0; j<count; j++)
         //{
         //    printf("[%ld] %s\n", ChildFile[i][j]->size, ChildFile[i][j]->path);
         //}
-        a+=ChildFileCount[i].count;
     }
-    printf("Total sum = %d files.\n", a);
+    printf("=== Same [%lld byte] ===\n", Same->sum_size);
+    printf("Total %d files.\n", Same->count);
+    printf("\n----------------------------\n\n");
+    printf("Total [%lld byte].\n", total_size);
+    printf("Total %lld files.\n", total_count);
 
-    deinit_dist(n_child);
+    //deinit_dist(n_child);
     //return 0;
+
+
 }
 

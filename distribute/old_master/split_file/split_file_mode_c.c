@@ -57,7 +57,7 @@ void split_file_mode_c(int ChildNum, int percent, void *src)
     struct FileSource tmp_move;
     FileSrc find;
     
-    max_child_size = (long long) ((percent/100.0)*(Parent->sum_size));
+    max_child_size = (long long) (percent/100.0)*Parent->sum_size;
     /*
     max_parent = Parent->count;
     for(i=0; i<max_parent; i++)

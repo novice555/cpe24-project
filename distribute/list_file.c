@@ -25,29 +25,40 @@ static long file_size(char *fullpath)
     return size;
 }
 */
+/*
 static long long file_size(char *path)
 {
     struct stat st;
     stat(path, &st);
     return (long long) st.st_size;
 }
+*/
 //static int kuy = 0;
 
-void list_file(char *absolute_path, char *relative_path, FileSource *Parent, FileSourceProperties *ParentCount)
+void list_file(char *absolute_path, char *workpath, void *src)
 {
+    CompactSrc *decompact = (CompactSrc *) src;
+    FileDesc Parent = decompact->in;
+    FileDesc Queue = decompact->queue;
+  //  FileSrc new, find;
+  //  FileSrc p_tail = Parent.tail;
+  //  FileSrc q_tail = Queue.tail;
     DIR *dir;
     struct dirent *ent;
     struct stat st_buf;
+    struct FileSource tmpfile;
     char nextfile[MAX_PATH];
     char nextpath[MAX_PATH];
     int dirlen;
     int count, size;
-
+    int worklen;
+    
+    worklen = strlen(workpath);
     dirlen = strlen(absolute_path);
     dir = opendir(absolute_path);
+    
     while((ent = readdir(dir))!=NULL)
     {
-        //kuy++;
 
         if(strcmp(ent->d_name, "..") == 0 || strcmp(ent->d_name, ".") == 0)
         {
@@ -58,29 +69,35 @@ void list_file(char *absolute_path, char *relative_path, FileSource *Parent, Fil
             fprintf(stderr,"Absolute path is too long: %s/%s", absolute_path, ent->d_name);
             return;
         }
-        strcpy(nextfile, absolute_path);
-        strcat(nextfile, ent->d_name);
+        strcpy(nextpath, absolute_path);
+        strcat(nextpath, ent->d_name);
         //printf("%s\n", nextfile);
-        stat(nextfile, &st_buf);
+        stat(nextpath, &st_buf);
         if(S_ISDIR(st_buf.st_mode))
         {
-            strcpy(nextpath, relative_path);
-            strcat(nextpath, ent->d_name);
+            
             strcat(nextpath, "/");
-            strcat(nextfile, "/");
-            list_file(nextfile, nextpath, Parent, ParentCount);
+            tmpfile.src_path = NULL;
+            tmpfile.filename = strbuff(nextpath, strlen(nextpath));
+            tmpfile.size = -1;
+            tmpfile.next = NULL;
+            tmpfile.back = NULL;
+            enqueue(Queue, tmpfile);
+            continue;
         }
         else
-        {   // printf("%s   ", nextfile);
-       // printf("size %d\n", read_file1(nextfile));
-            count = ParentCount[0].count;
-            size = file_size(nextfile);
-            //printf("%d\n", kuy);
-            Parent[count].src_path = strbuff(relative_path, strlen(relative_path) + 1);
-            Parent[count].filename = strbuff(ent->d_name, strlen(ent->d_name) + 1);
-            Parent[count].size = size;
-            ParentCount[0].sum_size += Parent[count].size;
-            ParentCount[0].count++;
+        {   
+            strcpy(nextfile, "./");
+            strcat(nextfile, absolute_path + worklen);
+            tmpfile.src_path = strbuff(nextfile, strlen(nextfile));
+            tmpfile.filename = strbuff(ent->d_name, strlen(ent->d_name));
+            tmpfile.size = (long long) st_buf.st_size;
+            tmpfile.next = NULL;
+            tmpfile.back = NULL;
+            //add and sort by size desc
+            insert_sort(Parent, tmpfile);
+            Parent->sum_size += (long long) st_buf.st_size;
+            Parent->count++;
         }
     }
     closedir(dir);
