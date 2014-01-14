@@ -3,8 +3,9 @@
 #include<limits.h>
 #include<string.h>
 #include"include/distribute.h"
-void enqueue(FileDesc desc, struct FileSource src);
-struct FileSource dequeue(FileDesc desc);
+const char CHILD_PATH[] = "/koppae/child/";
+const char PARENT_PATH[] = "/koppae/data/";
+const char TMP_PATH[] = "/tmp/";
 
 
 //variabl
@@ -95,7 +96,7 @@ static void deinit_dist(int child)
 
 void distribute(char *path, int n_child, int n_same, void (*split_file)(int, int, void*))
 {
-    int i, len;
+    int i;
     long long total_count, total_size;
     char absolute_path[MAX_PATH];
     struct CompactSource compact;
@@ -144,54 +145,23 @@ void distribute(char *path, int n_child, int n_same, void (*split_file)(int, int
     }
     
     copy_to_child(absolute_path, n_child, 0, &compact);
+
+    write_list(n_child, &compact);
+
+    write_file(n_child, &compact);
     
-    if(!(n_same>=100))
+    if(n_same<100)
     {
         copy_to_child(absolute_path, n_child, 1, &compact);  
-        write_same_list(Same, n_child);
     }
     
-/*
-    //debug
-    
-    FileSrc A;
-    A = Child[0]->head->next;
-    
-    while(A!=NULL)
-    {
-        printf("[%lld] %s%s\n", A->size, A->src_path, A->filename);
-        A = A->next;
-    } 
-    
-    printf("[%lld] Total = %d Files\n", Parent->sum_size, Parent->count);
 
-    //compact Source and pass to split_file
-    Compact.in = ParentFile;
-    Compact.in_count = ParentFileCount;
-    Compact.out = ChildFile;
-    Compact.out_count = ChildFileCount;
-    Compact.outsame = ChildSameFile;
-    Compact.outsame_count = ChildSameFileCount;
 
-    //function pointer split file to each child
-    //(*split_file)(n_same, n_child, ParentFile, ParentFileCount, ChildFile, ChildFileCount, ChildSameFile, ChildSameFileCount);
-    (*split_file)(n_same, n_child, &Compact);
-    
-    //send file to child
-    
-    //debug
-    
-    for(i=0; i<FileCount ;i++)
-    {
-        printf("[%ld] %s\n", SourceFile[i]->size, SourceFile[i]->path);
-    }
-*/
     
     printf("\n*********Summary********\n\n");
     printf("Percent: %d/%d\n", n_same, 100 - n_same);
     printf("=== Parent [%lld byte] ===\n", Parent->sum_size);
     printf("Total %d files.\n", Parent->count);
-    int a = 0;
     for(i=0; i<n_child; i++)
     {
         printf("=== Child %d [%lld byte] ===\n", i, Child[i]->sum_size);

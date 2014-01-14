@@ -50,7 +50,6 @@ void list_file(char *absolute_path, char *workpath, void *src)
     char nextfile[MAX_PATH];
     char nextpath[MAX_PATH];
     int dirlen;
-    int count, size;
     int worklen;
     
     worklen = strlen(workpath);

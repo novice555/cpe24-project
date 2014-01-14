@@ -2,8 +2,6 @@
 #include<stdlib.h>
 #include"include/distribute.h"
 #include<stdio.h>
-static const char CHILD_PATH[] = "/koppae/child/";
-static const char TMP_PATH[] = "/tmp/";
 void copy_to_child(char *source_path, int ChildNum, int mode, void *src)
 {
     CompactSrc *decompact = (CompactSrc *) src;
@@ -13,12 +11,11 @@ void copy_to_child(char *source_path, int ChildNum, int mode, void *src)
     FILE *tmpFile[ChildNum];
     char tmpFileName[ChildNum][MAX_PATH];
     char command[ChildNum][MAX_COMMAND];
-    int i, j, n;
-    char mode_path[MAX_PATH];
+    int i;
     FileSrc find;
 
     //check child status
-    check_nfs_child(CHILD_PATH, ChildNum);
+    check_nfs_child(ChildNum);
     
     for(i=0; i<ChildNum; i++)
     {
@@ -42,13 +39,16 @@ void copy_to_child(char *source_path, int ChildNum, int mode, void *src)
                 tmpFileName[i]);
             exit(1);
         }
-
-        while(find!=NULL)
+        int count = 0;;
+        for(find = find; find!=NULL; find=find->next)
         {
             fprintf(tmpFile[i], "%s%s\n", find->src_path, find->filename);
-            find = find->next;
+            //if(count==1859||count==1858)
+            //printf( "%s%s\n", find->src_path, find->filename);
+            //count++;
+            //printf("%d\n",count);
         }
-        
+     
     /*
         n = ChildCount[i].count;
     

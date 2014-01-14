@@ -25,11 +25,12 @@ static void stradd(char *str)
 char* strbuff(char *text, int len)
 {
     char *tmp;
-    if((tmp = malloc(len * sizeof(char)))==NULL)
+    if((tmp = malloc((len+1) * sizeof(char)))==NULL)
     {
         fprintf(stderr, "Cannot malloc string: %s\n", text);
         exit(1);
     }
+    //tmp[0] = '\0';
     strcpy(tmp, text);
     stradd(tmp);
     return tmp;

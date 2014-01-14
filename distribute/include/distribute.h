@@ -42,6 +42,10 @@ struct stringtype {
 typedef struct stringtype *strtype;
 
 //typedef CompactSourceDesc *CompactSource;
+extern const char CHILD_PATH[];
+extern const char PARENT_PATH[];
+extern const char TMP_PATH[];
+
 
 //function split file
 extern void split_file_mode_c(int ChildNum, int percent, void *src);
@@ -50,15 +54,18 @@ extern void split_file_mode_c(int ChildNum, int percent, void *src);
 //extern void split_file_mode_b(int ChildNum, int Same, FileSource *Parent, FileSourceProperties *ParentCount, FileSource **Child, FileSourceProperties *ChildCount);
 
 //announce global function
-/*void list_file(char *absolute_path, char *relative_path, FileSource *Parent, FileSourceProperties *ParentCount);
-void copy_to_child(FileSource **Child, FileSourceProperties *ChildCount, int MaxChild, char *source_path);
+
+
 void check_nfs_child(int MaxChild);
-//int rsync_copy(char *src_list, char *src, char *dst);
-void rsync_copy(char cmd[][MAX_STRING], int n);
-//void distribute(char *path, int n_child, int n_same, void (*split_file)(int, int, FileSource*, FileSourceProperties*, FileSource**, FileSourceProperties*, FileSource*, FileSourceProperties*));
-*/
-char* strbuff(char *text, int len);
+void copy_to_child(char *source_path, int ChildNum, int mode, void *src);
+void distribute(char *path, int n_child, int n_same, void (*split_file)(int, int, void*));
+void list_file(char *absolute_path, char *workpath, void *src);
 void enqueue(FileDesc desc, struct FileSource src);
+void insert_sort(FileDesc desc, struct FileSource src);
+void rsync_copy(char cmd[][MAX_COMMAND], int n);
+void string_init();
+void string_deinit();
+void write_file(int child, void *src);
+void write_list(int child, void *src);
+char* strbuff(char *text, int len);
 struct FileSource dequeue(FileDesc desc);
-
-

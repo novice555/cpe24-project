@@ -49,13 +49,10 @@ void split_file_mode_c(int ChildNum, int percent, void *src)
     FileDesc *Child = decompact->out;
     FileDesc Same = decompact->same;
 
-    int i, count;
-    int max_parent;
     int cmin;
     long long max_child_size;
     long long child_size;
     struct FileSource tmp_move;
-    FileSrc find;
     
     max_child_size = (long long) ((percent/100.0)*(Parent->sum_size));
     /*
@@ -92,14 +89,13 @@ void split_file_mode_c(int ChildNum, int percent, void *src)
         childsize += tmpParent[count]->size; count++;
         */
     }
-    find = Parent->head->next;
-    while(find!=NULL)
+    //find = Parent->head->next;
+    while(Parent->head != Parent->tail)
     {
         tmp_move = dequeue(Parent);
         enqueue(Same, tmp_move);
         Same->count++;
         Same->sum_size += tmp_move.size;
-        find = find->next;
     }
     
 }

@@ -1,7 +1,7 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include"include/distribute.h"
-void check_nfs_child(char *child_path, int MaxChild)
+void check_nfs_child(int MaxChild)
 {
     int i;
     FILE *tmpFileTest;
@@ -9,7 +9,7 @@ void check_nfs_child(char *child_path, int MaxChild)
     int failed_check = 0;
     for(i=0; i<MaxChild; i++)
     {
-        sprintf(path,"%s0%d/tmpTest", child_path, i+1);
+        sprintf(path,"%s0%d/tmpTest", CHILD_PATH, i+1);
         //printf("%s\n", path);
         tmpFileTest = fopen(path, "wb+");
         if(tmpFileTest == NULL)

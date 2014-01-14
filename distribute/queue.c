@@ -5,20 +5,29 @@ void enqueue(FileDesc desc, struct FileSource src)
 {
     FileSrc new = malloc(sizeof(struct FileSource));
     *new = src;
-    desc->tail->next = new;
     new->back = desc->tail;
+    new->next = NULL;
+    desc->tail->next = new;
     desc->tail = new;
 }
 struct FileSource dequeue(FileDesc desc)
 {
     struct FileSource ret_val;
-    FileSrc old = desc->head->next;
-    desc->head->next = old->next;
-    if(old->next!=NULL)
+    FileSrc old;
+    old = desc->head->next;
+    if(old->next)
+    {
         old->next->back = desc->head;
+        desc->head->next = old->next;
+    }
     else
-        desc->tail = old->back;
+    {
+        desc->tail = desc->head;
+        desc->head->next = NULL;
+    }
     ret_val = *(old);
+    ret_val.next = NULL;
+    ret_val.back = NULL;
     desc->sum_size -= old->size;
     desc->count--;
     free(old);

@@ -10,6 +10,7 @@ int main(int argc, char *argv[])
         distribute(argv[1], atoi(argv[2]), 0, split_file_mode_b);
     return 0;
 */
+    //distribute("~/news", 4, 80, split_file_mode_c);
     distribute(argv[1], atoi(argv[2]), 80, split_file_mode_c);
-    
+    return 0;   
 }
