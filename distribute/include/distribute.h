@@ -58,9 +58,8 @@ extern void split_file_mode_c(int ChildNum, int percent, void *src);
 
 void check_nfs_child(int MaxChild);
 void copy_to_child(char *source_path, int ChildNum, int mode, void *src);
-void distribute(char *path, int n_child, int n_same, void (*split_file)(int, int, void*));
+void distribute(char *func, char *path, int n_child, int n_diff, void (*split_file)(int, int, void*));
 void list_file(char *absolute_path, char *workpath, void *src);
-void enqueue(FileDesc desc, struct FileSource src);
 void insert_sort(FileDesc desc, struct FileSource src);
 void rsync_copy(char cmd[][MAX_COMMAND], int n);
 void string_init();
@@ -68,4 +67,8 @@ void string_deinit();
 void write_file(int child, void *src);
 void write_list(int child, void *src);
 char* strbuff(char *text, int len);
+void enqueue(FileDesc desc, struct FileSource src);
 struct FileSource dequeue(FileDesc desc);
+struct FileSource popqueue(FileDesc desc);
+void pushbottom(FileDesc desc, struct FileSource src);
+

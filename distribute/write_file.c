@@ -31,11 +31,11 @@ void write_file(int child, void *src)
     FileDesc *Child = decompact->out;
     FileDesc Same = decompact->same;
 
-    for(i=1; i<child+1; i++)
+    for(i=0; i<child; i++)
     {
-        sprintf(dstname, "%s%02d/list/static.file", CHILD_PATH, i);
-        write(Child[i-1], dstname);
-        sprintf(dstname, "%s%02d/list/dynamic.file", CHILD_PATH, i);
+        sprintf(dstname, "%s%02d/list/static.file", CHILD_PATH, i+1);
+        write(Child[i], dstname);
+        sprintf(dstname, "%s%02d/list/dynamic.file", CHILD_PATH, i+1);
         write(Same, dstname);
         
     }

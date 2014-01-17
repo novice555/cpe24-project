@@ -9,6 +9,29 @@ void enqueue(FileDesc desc, struct FileSource src)
     new->next = NULL;
     desc->tail->next = new;
     desc->tail = new;
+    desc->sum_size += src.size;
+    desc->count++;
+}
+void pushbottom(FileDesc desc, struct FileSource src)
+{
+    FileSrc new = malloc(sizeof(struct FileSource));
+    *new = src;
+    if(desc->head->next)
+    {
+        desc->head->next->back = new;
+        new->next = desc->head->next;
+        desc->head->next = new;
+        new->back = desc->head;
+    }
+    else
+    {
+        desc->tail->next = new;
+        new->back = desc->tail;
+        desc->tail = new;
+    }
+    desc->sum_size += src.size;
+    desc->count++;
+ 
 }
 struct FileSource dequeue(FileDesc desc)
 {
@@ -25,6 +48,22 @@ struct FileSource dequeue(FileDesc desc)
         desc->tail = desc->head;
         desc->head->next = NULL;
     }
+    ret_val = *(old);
+    ret_val.next = NULL;
+    ret_val.back = NULL;
+    desc->sum_size -= old->size;
+    desc->count--;
+    free(old);
+    return ret_val;
+}
+
+struct FileSource popqueue(FileDesc desc)
+{
+    struct FileSource ret_val;
+    FileSrc old;
+    old = desc->tail;
+    desc->tail = old->back;
+    desc->tail->next = NULL;
     ret_val = *(old);
     ret_val.next = NULL;
     ret_val.back = NULL;

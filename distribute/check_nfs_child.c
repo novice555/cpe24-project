@@ -10,7 +10,7 @@ void check_nfs_child(int MaxChild)
     for(i=0; i<MaxChild; i++)
     {
         sprintf(path,"%s0%d/tmpTest", CHILD_PATH, i+1);
-        //printf("%s\n", path);
+        printf("%s\n", path);
         tmpFileTest = fopen(path, "wb+");
         if(tmpFileTest == NULL)
         {

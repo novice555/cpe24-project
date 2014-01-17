@@ -11,6 +11,12 @@ int main(int argc, char *argv[])
     return 0;
 */
     //distribute("~/news", 4, 80, split_file_mode_c);
-    distribute(argv[1], atoi(argv[2]), 80, split_file_mode_c);
+    distribute(
+        argv[1],
+        argv[2],
+        atoi(argv[3]),
+        atoi(argv[4]),
+        split_file_mode_c
+    );
     return 0;   
 }

@@ -58,7 +58,7 @@ void copy_to_child(char *source_path, int ChildNum, int mode, void *src)
                 Child[i][j].src_path, Child[i][j].filename);
         }
     */
-        sprintf(command[i], "rsync -as --files-from=%s %s %s\n", \
+        sprintf(command[i], "rsync -as --size-only --files-from=%s %s %s\n", \
             tmpFileName[i], source_path, dst);
         fclose(tmpFile[i]);
     }

@@ -54,7 +54,7 @@ void split_file_mode_c(int ChildNum, int percent, void *src)
     long long child_size;
     struct FileSource tmp_move;
     
-    max_child_size = (long long) ((percent/100.0)*(Parent->sum_size));
+    max_child_size = percent*(Parent->sum_size)/100;
     /*
     max_parent = Parent->count;
     for(i=0; i<max_parent; i++)
@@ -77,8 +77,8 @@ void split_file_mode_c(int ChildNum, int percent, void *src)
         cmin = min_child(Child, ChildNum);
         tmp_move = dequeue(Parent);
         enqueue(Child[cmin], tmp_move);
-        Child[cmin]->count++;
-        Child[cmin]->sum_size += tmp_move.size;
+        //Child[cmin]->count++;
+        //Child[cmin]->sum_size += tmp_move.size;
         child_size += tmp_move.size;
         //printf("[%ld] %s\n", tmpParent[i]->size, tmpParent[i]->path);
          /*
@@ -94,8 +94,8 @@ void split_file_mode_c(int ChildNum, int percent, void *src)
     {
         tmp_move = dequeue(Parent);
         enqueue(Same, tmp_move);
-        Same->count++;
-        Same->sum_size += tmp_move.size;
+        //Same->count++;
+        //Same->sum_size += tmp_move.size;
     }
     
 }

@@ -18,10 +18,10 @@ static void dist_init(int child, void *src)
     int i;
     char *first = "FIRST";
     CompactSrc *decompact = (CompactSrc *) src;
-    FileDesc Parent = decompact->in;
-    FileDesc *Child = decompact->out;
-    FileDesc Same = decompact->same;
-    FileDesc Queue = decompact->queue;
+    FileDesc Parent;
+    FileDesc *Child;
+    FileDesc Same;
+    FileDesc Queue;
     
     Parent = malloc(sizeof(struct FileSourceProperties));
     Parent->count = 0;
@@ -94,7 +94,7 @@ static void deinit_dist(int child)
 }
 */
 
-void distribute(char *path, int n_child, int n_same, void (*split_file)(int, int, void*))
+void distribute(char *func, char *path, int n_child, int n_diff, void (*split_file)(int, int, void*))
 {
     int i;
     long long total_count, total_size;
@@ -114,52 +114,60 @@ void distribute(char *path, int n_child, int n_same, void (*split_file)(int, int
     Child = compact.out;
     Same = compact.same;
     Queue = compact.queue;
-
-    realpath(path, absolute_path);
-    strcpy(path, absolute_path);
-    if(path[strlen(path)-1]!='/')
-        strcat(absolute_path, "/");
-    
-    printf("Path: %s\n", absolute_path);
-    printf("Child: %d\n", n_child);
-
-    work.filename = strbuff(absolute_path, strlen(absolute_path));
-    work.src_path = NULL;
-    work.size = -1;
-    work.next = NULL;
-    work.back = NULL;
-    enqueue(Queue, work);
-    //listfile in directory
     total_count = 0;
     total_size = 0;
-    while(Queue->head->next!=NULL)
+    
+    if(!strcmp(func, "re"))
     {
-        printf("%s\n", Queue->head->next->filename);
-        tmp_queue = dequeue(Queue);
-        list_file(tmp_queue.filename, absolute_path, &compact);        
-        total_count += Parent->count;
-        total_size += Parent->sum_size;
-        (*split_file)(n_child, n_same, &compact);
-        //Parent->count = 0;
-        //Parent->sum_size = 0;
+        rearrange(n_child, n_diff, &compact);
+        
     }
-    
-    copy_to_child(absolute_path, n_child, 0, &compact);
-
-    write_list(n_child, &compact);
-
-    write_file(n_child, &compact);
-    
-    if(n_same<100)
+    else 
     {
-        copy_to_child(absolute_path, n_child, 1, &compact);  
-    }
-    
+
+        realpath(path, absolute_path);
+        strcpy(path, absolute_path);
+        if(path[strlen(path)-1]!='/')
+            strcat(absolute_path, "/");
+        
+        printf("Path: %s\n", absolute_path);
+        printf("Child: %d\n", n_child);
+
+        work.filename = strbuff(absolute_path, strlen(absolute_path));
+        work.src_path = NULL;
+        work.size = -1;
+        work.next = NULL;
+        work.back = NULL;
+        enqueue(Queue, work);
+        //listfile in directory
+        while(Queue->head->next!=NULL)
+        {
+            printf("%s\n", Queue->head->next->filename);
+            tmp_queue = dequeue(Queue);
+            list_file(tmp_queue.filename, absolute_path, &compact);        
+            total_count += Parent->count;
+            total_size += Parent->sum_size;
+            (*split_file)(n_child, n_diff, &compact);
+            //Parent->count = 0;
+            //Parent->sum_size = 0;
+        }
+        
+        copy_to_child(absolute_path, n_child, 0, &compact);
+
+        write_list(n_child, &compact);
+
+        write_file(n_child, &compact);
+        
+        if(n_diff<100)
+        {
+            copy_to_child(absolute_path, n_child, 1, &compact);  
+        }
+    } 
 
 
     
     printf("\n*********Summary********\n\n");
-    printf("Percent: %d/%d\n", n_same, 100 - n_same);
+    printf("Percent: %d/%d\n", n_diff, 100 - n_diff);
     printf("=== Parent [%lld byte] ===\n", Parent->sum_size);
     printf("Total %d files.\n", Parent->count);
     for(i=0; i<n_child; i++)
