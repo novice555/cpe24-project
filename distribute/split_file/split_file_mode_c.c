@@ -22,7 +22,6 @@ static int qsort_cmpfunc(const void *a, const void *b)
     else
         return cmp;
 }
-*/
 
 static int min_child(FileDesc *desc, int n)
 {
@@ -41,6 +40,24 @@ static int min_child(FileDesc *desc, int n)
     }
     return min_no;
 }
+*/
+static int min_child(long long size[], int n)
+{
+    int i;
+    int min_no;
+    long long min;
+    min_no = 0;
+    min = size[0];
+    for(i=1; i<n; i++)
+    {
+        if(size[i] < min)
+        {
+            min = size[i];
+            min_no = i;
+        }
+    }
+    return min_no;
+}
 
 void split_file_mode_c(int ChildNum, int percent, void *src)
 {
@@ -53,6 +70,8 @@ void split_file_mode_c(int ChildNum, int percent, void *src)
     long long max_child_size;
     long long child_size;
     struct FileSource tmp_move;
+    long long c_size[ChildNum];
+    int i;
     
     max_child_size = percent*(Parent->sum_size)/100;
     /*
@@ -72,13 +91,18 @@ void split_file_mode_c(int ChildNum, int percent, void *src)
     }
     */
     child_size = 0;
+    for(i=0; i<ChildNum; i++)
+    {
+        c_size[i] = 0;
+    }
     while(child_size<max_child_size)
     {
-        cmin = min_child(Child, ChildNum);
+        cmin = min_child(c_size, ChildNum);
         tmp_move = dequeue(Parent);
         enqueue(Child[cmin], tmp_move);
         //Child[cmin]->count++;
         //Child[cmin]->sum_size += tmp_move.size;
+        c_size[cmin] += tmp_move.size;
         child_size += tmp_move.size;
         //printf("[%ld] %s\n", tmpParent[i]->size, tmpParent[i]->path);
          /*

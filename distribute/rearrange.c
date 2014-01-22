@@ -94,9 +94,9 @@ void rearrange(int n_child, int n_diff, void *src)
         first_group_list(n_child, src, &re_compact);
         arr = arrange(n_child, n_diff, &re_compact, &mv_compact);
         //test
-            find = Re_Child[0]->head->next;
-            for(find = find; find!=NULL; find=find->next)
-                printf("%s %s %lld\n",find->src_path, find->filename, find->size);
+         //   find = Re_Child[0]->head->next;
+          //  for(find = find; find!=NULL; find=find->next)
+           //     printf("%s %s %lld\n",find->src_path, find->filename, find->size);
         for(i=0; i<n_child; i++)
         {
             //find = Re_Child[i]->head->next;
