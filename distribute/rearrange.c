@@ -33,7 +33,7 @@ void re_init(int child, void *re_src)
 
     Re_Same = malloc(sizeof(struct FileSourceProperties));
     Re_Same->count = 0;
-    Re_Same->sum_size = -1;
+    Re_Same->sum_size = 0;
     Re_Same->head = malloc(sizeof(struct FileSource));
     Re_Same->head->filename = strbuff(first, strlen(first));
     Re_Same->head->next = NULL;
@@ -91,12 +91,19 @@ void rearrange(int n_child, int n_diff, void *src)
     while(Child[0]->head->next != NULL)
     {
         check = Same->count;
+        //printf("*%lld\n,",Re_Same->sum_size);
         first_group_list(n_child, src, &re_compact);
+        //printf("%s\n,",Re_Same->head->next->src_path);
+        //printf("=== Same [%lld byte] ===\n", Re_Same->sum_size);
+        //printf("Total %d files.\n", Re_Same->count);
+        
         arr = arrange(n_child, n_diff, &re_compact, &mv_compact);
+        //printf("=== Same [%lld byte] ===\n", Re_Same->sum_size);
+        //printf("Total %d files.\n", Re_Same->count);
         //test
-         //   find = Re_Child[0]->head->next;
-          //  for(find = find; find!=NULL; find=find->next)
-           //     printf("%s %s %lld\n",find->src_path, find->filename, find->size);
+            find = Re_Same->head->next;
+            for(find = find; find!=NULL; find=find->next)
+                printf("%s %s %lld\n",find->src_path, find->filename, find->size);
         for(i=0; i<n_child; i++)
         {
             //find = Re_Child[i]->head->next;
@@ -112,6 +119,7 @@ void rearrange(int n_child, int n_diff, void *src)
         //find = Re_Same->head->next;
         //for(find = find; find!=NULL; find=find->next)
             //printf("%s %s %lld\n",find->src_path, find->filename, find->size);
+        printf("%lld\n",size_same);
         count_same += Re_Same->count;
         size_same += Re_Same->sum_size;
         Re_Same->head->next = NULL;
@@ -119,17 +127,26 @@ void rearrange(int n_child, int n_diff, void *src)
         Re_Same->count = 0;
         Re_Same->sum_size = 0;
     }
-    //for(i=0; i<n_child; i++)
     
+    
+    //if(check!=Re_Same->count)
+    //{
     /*
-    if(check!=Re_Same->count)
-    {
         if(arr)
             move_same_to_child(n_child, &mv_compact);
         else
             move_child_to_same(n_child, &mv_compact);
         //write_list(n_child, &re_compact);
         //write_file(n_child, &re_compact);
-    }  */     
+    */
+    //}  
     //re_deinit();
+    printf("===== Rearrange Result =====\n");
+    for(i=0; i<n_child; i++)
+    {
+        printf("=== Child [%lld byte] ===\n", size[i]);
+        printf("Total %d files.\n", count[i]);
+    }
+    printf("=== Same [%lld byte] ===\n", size_same);
+    printf("Total %d files.\n", count_same);
 }

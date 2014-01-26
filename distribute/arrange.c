@@ -8,9 +8,9 @@ static int max_child(FileDesc *desc, int n)
     int i;
     int max_no;
     long long max;
-    max_no = 0;
-    max = desc[0]->sum_size;
-    for(i=1; i<n; i++)
+    max_no = n-1;
+    max = desc[n-1]->sum_size;
+    for(i=n-1; i>=0; i--)
     {
         if(desc[i]->sum_size >= max)
         {
@@ -88,10 +88,10 @@ int arrange(int child, int percent, void *re_src, void *mv_src)
             child_size -= tmp_move.size;
         }
         tmp_move = dequeue(Re_Same);
-        cmax = min_child(Re_Child, child);
-        enqueue(Re_Child[cmax], tmp_move);
+        cmin = min_child(Re_Child, child);
+        enqueue(Re_Child[cmin], tmp_move);
         child_size += tmp_move.size;
-        popqueue(Mv_Child[cmax]);
+        popqueue(Mv_Child[cmin]);
         return 0;
     }
 
