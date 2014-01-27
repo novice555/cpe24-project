@@ -28,6 +28,7 @@ static void dist_init(int child, void *src)
     Parent->sum_size = 0;
     Parent->head = malloc(sizeof(struct FileSource));
     Parent->head->filename = strbuff(first, strlen(first));
+    Parent->head->size = LLONG_MAX;
     Parent->head->next = NULL;
     Parent->head->back = NULL;
     Parent->tail = Parent->head;
@@ -37,6 +38,7 @@ static void dist_init(int child, void *src)
     Same->sum_size = 0;
     Same->head = malloc(sizeof(struct FileSource));
     Same->head->filename = strbuff(first, strlen(first));
+    Same->head->size = LLONG_MAX;
     Same->head->next = NULL;
     Same->head->back = NULL;
     Same->tail = Same->head;
@@ -46,6 +48,7 @@ static void dist_init(int child, void *src)
     Queue->sum_size = -1;
     Queue->head = malloc(sizeof(struct FileSource));
     Queue->head->filename = strbuff(first, strlen(first));
+    Queue->head->size = LLONG_MAX;
     Queue->head->next = NULL;
     Queue->head->back = NULL;
     Queue->tail = Queue->head;
@@ -58,6 +61,7 @@ static void dist_init(int child, void *src)
         Child[i]->sum_size = 0;
         Child[i]->head = malloc(sizeof(struct FileSource));
         Child[i]->head->filename = strbuff(first, strlen(first));
+        Child[i]->head->size = LLONG_MAX;
         Child[i]->head->next = NULL;
         Child[i]->head->back = NULL;
         Child[i]->tail = Child[i]->head;

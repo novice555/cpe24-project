@@ -43,7 +43,7 @@ void delete_same_file(int child, void *mv_src)
     rsync_copy(command, child);
 }
 
-void delete_child_file(int child, int mode, void *mv_src)
+void delete_child_file(int child, void *mv_src)
 {
     CompactSrc *mv_decompact = (CompactSrc *) mv_src;
     FileDesc *Mv_Child = mv_decompact->out;

@@ -37,6 +37,13 @@ struct FileSource dequeue(FileDesc desc)
 {
     struct FileSource ret_val;
     FileSrc old;
+    
+    if(desc->head == desc->tail)
+    {
+        fprintf(stderr, "Dequeue empty queue.\n");
+        exit(1);
+    }
+
     old = desc->head->next;
     if(old->next)
     {
@@ -61,6 +68,13 @@ struct FileSource popqueue(FileDesc desc)
 {
     struct FileSource ret_val;
     FileSrc old;
+
+    if(desc->head == desc->tail)
+    {
+        fprintf(stderr, "Popqueue empty queue.\n");
+        exit(1);
+    }
+
     old = desc->tail;
     desc->tail = old->back;
     desc->tail->next = NULL;
@@ -81,7 +95,14 @@ void insert_sort(FileDesc desc, struct FileSource src)
     *new = src;
     find = desc->head->next;
     while((find != NULL) && (find->size > new->size))
+    {
+        if(find->size == new->size)
+        {
+            if(strcmp(new->filename, find->filename)<0)
+                break;
+        }
         find = find->next;
+    }
     if(find)
     {
         new->back = find->back;

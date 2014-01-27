@@ -36,11 +36,13 @@ void first_group_list(int child, void *src, void *re_src)
     for(i=0; i<child; i++)
         extract(Child[i], Re_Child[i], tmp_path);
     extract(Same, Re_Same, tmp_path);
+    /*
     if(!Re_Same->count)
     {
         fprintf(stderr, "Cannot group file list: Same->count = 0.\n");
-        error(1);
+        exit(1);
     }
+    */
     for(i=0; i<child; i++)
     {
         if(!Re_Child[i]->count)

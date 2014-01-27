@@ -25,5 +25,5 @@ void move_child_to_same(int child, void *mv_src)
         sprintf(absolute_path, "/koppae/child/%02d/static/", i+1);
         copy_to_child(absolute_path, child, 1, &cs_compact);
     }
-    delete_same_file(child, mv_src);
+    delete_child_file(child, mv_src);
 }
