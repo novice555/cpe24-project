@@ -67,6 +67,7 @@ void rearrange(int n_child, int n_diff, void *src)
     CompactSrc re_compact;
 
     CompactSrc *decompact = (CompactSrc *) src;
+    FileDesc Parent = decompact->in;
     FileDesc *Child = decompact->out;
     FileDesc Same = decompact->same;
 

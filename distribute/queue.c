@@ -81,7 +81,15 @@ void insert_sort(FileDesc desc, struct FileSource src)
     *new = src;
     find = desc->head->next;
     while((find != NULL) && (find->size > new->size))
+    {
         find = find->next;
+        if(new->size == find->size)
+        {
+            if(strcmp(find->filename, new->filename)<0)
+                break;
+        }
+    }
+    
     if(find)
     {
         new->back = find->back;
