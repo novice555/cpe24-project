@@ -184,7 +184,7 @@ void rearrange(int n_child, int n_diff, void *src)
         //find = Wr_Child[0]->head->next;
         //for(find = find; find!=NULL; find=find->next)
           //  printf("%s %s %lld\n",find->src_path, find->filename, find->size);
-        printf("%lld\n",size_same);
+        //printf("%lld\n",size_same);
         count_same += Re_Same->count;
         size_same += Re_Same->sum_size;
         movequeue(Wr_Same, Re_Same);

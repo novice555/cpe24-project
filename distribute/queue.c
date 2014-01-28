@@ -94,7 +94,7 @@ void insert_sort(FileDesc desc, struct FileSource src)
     FileSrc new = malloc(sizeof(struct FileSource));
     *new = src;
     find = desc->head->next;
-    while((find != NULL) && (find->size > new->size))
+    while((find != NULL) && (find->size >= new->size))
     {
         if(find->size == new->size)
         {

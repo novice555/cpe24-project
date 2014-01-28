@@ -37,7 +37,7 @@ static int maxxx_child(struct FileSource cmp[], int n)
         }
         else if(cmp[i].size == min)
         {
-            if(strcmp(cmp[min_no].filename, cmp[i].filename)>=0)
+            if(strcmp(cmp[min_no].filename, cmp[i].filename)<0)
             {
                 min = cmp[i].size;
                 min_no = i;
@@ -91,6 +91,7 @@ int arrange(int child, int percent, void *re_src, void *mv_src)
         child_size += Re_Child[i]->sum_size;
     }
     max_child_size = percent*sum_all_size/100;
+    printf("%lld\n", max_child_size);
     if(child_size<max_child_size)
     {
     
