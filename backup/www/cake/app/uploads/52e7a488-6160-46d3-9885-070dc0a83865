@@ -1,0 +1,16 @@
+C:\Windows\system32>reagentc /info
+Windows Recovery Environment (Windows RE) and system reset configuration
+information:
+
+    Windows RE status:         Enabled
+    Windows RE location:       \\?\GLOBALROOT\device\harddisk0\partition2\Recove
+ry\WindowsRE
+    Boot Configuration Data (BCD) identifier: 8a27291b-c261-11e2-9bda-df676f970f
+dd
+    Recovery image location:   \\?\GLOBALROOT\device\harddisk0\partition6\source
+s
+    Recovery image index:      2
+    Custom image location:
+    Custom image index:        0
+
+REAGENTC.EXE: Operation Successful.

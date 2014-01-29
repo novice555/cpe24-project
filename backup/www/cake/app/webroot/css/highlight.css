@@ -1,0 +1,9 @@
+@charset "utf-8";
+.highlightsrc {
+    background-color:#FFFF00;
+/*    margin:0 3px 0 3px; */
+}
+.highlightsame {
+    background-color: #00FFFF;
+/*    margin:0 3px 0 3px; */
+}
