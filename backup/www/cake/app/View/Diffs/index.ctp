@@ -12,7 +12,10 @@ echo $this->Html->div(
     'form-group',
     $this->Form->file('Diff.submittedfile')
 );
-
+echo $this->Html->div(
+    'form-group',
+    $this->Form->input('type', array('label' => false))
+);
 echo $this->Form->end('Submit');
 ?>
 <table class="table table-hover">

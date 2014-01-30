@@ -10,6 +10,8 @@ then
     echo -n "" > myqueue
 fi
 path_result="/var/www/cake/app/result"
+outfile="/tmp/output.txt"
+infile="/koppae/data/input.txt"
 
 pid=`cat pid`
 isrun=`ps -Al | awk -F' ' '{print $4}' | grep ^$pid$`
@@ -17,20 +19,33 @@ isrun=`ps -Al | awk -F' ' '{print $4}' | grep ^$pid$`
 #echo $$
 if [ -n "$isrun" ]
 then
-    echo $1 >> myqueue
+    echo "$@" >> myqueue
 else
     echo $$ > pid
-    echo $1 > myqueue
+    echo $@ >> myqueue
     run=`head -n1 myqueue`
-    filename=`echo $run | awk -F' ' '{print $5}'`
-    outfile=`echo $run | awk -F' ' '{print $6}'`
     while [ -n "$run" ]
     do
         echo $run
+	#init argument
+        read -a runarray <<< "$run"
+        filename="${runarray[0]}"
+        types="${runarray[@]:1}"
+	echo $filename
+	echo $types
+	#dequeue
         tail -n+2 myqueue > myqueue.tmp
         cat myqueue.tmp > myqueue
         rm myqueue.tmp
-        #$run
+	#copy to child
+	cp $filename /koppae/data/input.txt
+	cp $filename /koppae/child/01/input.txt
+	cp $filename /koppae/child/02/input.txt
+	cp $filename /koppae/child/03/input.txt
+	cp $filename /koppae/child/04/input.txt
+	#run
+	echo "mpirun -hostfile /jo/gdis.txt /jo/dsd $infile $outfile $types"
+	mpirun -hostfile /jo/gdis.txt /jo/dsd $infile $outfile $types
         result=`cat $outfile`
         if [ -n "$result" ]
         then
@@ -46,7 +61,5 @@ else
             mysql < update.sql
         fi
         run=`head -n1 myqueue`
-        filename=`echo $run | awk -F' ' '{print $5}'`
-        outfile=`echo $run | awk -F' ' '{print $6}'`
     done
 fi
