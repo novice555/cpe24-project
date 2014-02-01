@@ -31,7 +31,7 @@ class DiffsController extends AppController {
             $file = $this->request->data['Diff']['submittedfile'];
             if($file['error'] === UPLOAD_ERR_OK) {
                 $id = String::uuid();
-                if(move_uploaded_file($file['tmp_name'], APP.'uploads'.DS.$id)) {
+                if(move_uploaded_file($file['tmp_name'], '/koppae/working/'.'uploads'.DS.$id)) {
 //                  $this->set('temp', $this->Post->create());
                     $this->Diff->create();
                     $this->request->data['Diff']['name'] = $file['name'];
