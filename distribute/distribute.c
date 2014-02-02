@@ -7,7 +7,6 @@ const char CHILD_PATH[] = "/koppae/child/";
 const char PARENT_PATH[] = "/koppae/data/";
 const char TMP_PATH[] = "/tmp/";
 
-
 //variabl
 
 
@@ -121,6 +120,16 @@ void distribute(char *func, char *path, int n_child, int n_diff, void (*split_fi
     total_count = 0;
     total_size = 0;
     
+
+    realpath(path, absolute_path);
+    strcpy(path, absolute_path);
+    if(path[strlen(path)-1]!='/')
+        strcat(absolute_path, "/");
+      
+    printf("Path: %s\n", absolute_path);
+    printf("Child: %d\n", n_child);
+
+
     if(!strcmp(func, "re"))
     {
         rearrange(n_child, n_diff, &compact);
@@ -128,14 +137,6 @@ void distribute(char *func, char *path, int n_child, int n_diff, void (*split_fi
     }
     else 
     {
-
-        realpath(path, absolute_path);
-        strcpy(path, absolute_path);
-        if(path[strlen(path)-1]!='/')
-            strcat(absolute_path, "/");
-        
-        printf("Path: %s\n", absolute_path);
-        printf("Child: %d\n", n_child);
 
         work.filename = strbuff(absolute_path, strlen(absolute_path));
         work.src_path = NULL;
@@ -149,8 +150,8 @@ void distribute(char *func, char *path, int n_child, int n_diff, void (*split_fi
             printf("%s\n", Queue->head->next->filename);
             tmp_queue = dequeue(Queue);
             list_file(tmp_queue.filename, absolute_path, &compact);        
-            total_count += Parent->count;
-            total_size += Parent->sum_size;
+            //total_count += Parent->count;
+            //total_size += Parent->sum_size;
             (*split_file)(n_child, n_diff, &compact);
             //Parent->count = 0;
             //Parent->sum_size = 0;
@@ -166,6 +167,7 @@ void distribute(char *func, char *path, int n_child, int n_diff, void (*split_fi
         {
             copy_to_child(absolute_path, n_child, 1, &compact);  
         }
+
     } 
 
 
@@ -178,6 +180,8 @@ void distribute(char *func, char *path, int n_child, int n_diff, void (*split_fi
     {
         printf("=== Child %d [%lld byte] ===\n", i, Child[i]->sum_size);
         printf("Total %d files.\n", Child[i]->count);
+        total_count += Child[i]->count;
+        total_size += Child[i]->sum_size;
         //int count = ChildFileCount[i]->count;
         //for(j=0; j<count; j++)
         //{
@@ -186,10 +190,12 @@ void distribute(char *func, char *path, int n_child, int n_diff, void (*split_fi
     }
     printf("=== Same [%lld byte] ===\n", Same->sum_size);
     printf("Total %d files.\n", Same->count);
+    total_count += Same->count;
+    total_size += Same->sum_size;
     printf("\n----------------------------\n\n");
     printf("Total [%lld byte].\n", total_size);
     printf("Total %lld files.\n", total_count);
-
+    write_detail(absolute_path, n_child, n_diff, &compact);
     //deinit_dist(n_child);
     //return 0;
 

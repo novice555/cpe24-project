@@ -149,9 +149,10 @@ void rearrange(int n_child, int n_diff, void *src)
     long long size_same = 0;
     read_file(n_child, src);
     FileSrc find;
-    while(Child[0]->head->next != NULL)
+
+    while(Child[0]->head->next != NULL || Same->head->next != NULL)
     {
-        check = Same->count;
+        //check = Same->count;
         //printf("*%lld\n,",Re_Same->sum_size);
         first_group_list(n_child, src, &re_compact);
         //printf("%s\n,",Re_Same->head->next->src_path);
@@ -173,7 +174,8 @@ void rearrange(int n_child, int n_diff, void *src)
             
             count[i] += Re_Child[i]->count;
             size[i] += Re_Child[i]->sum_size;
-            movequeue(Wr_Child[i], Re_Child[i]);
+            if(Re_Child[i]->head->next != NULL)
+                movequeue(Wr_Child[i], Re_Child[i]);
             /*
             Re_Child[i]->head->next = NULL;
             Re_Child[i]->tail = Re_Child[i]->head;
@@ -187,7 +189,8 @@ void rearrange(int n_child, int n_diff, void *src)
         //printf("%lld\n",size_same);
         count_same += Re_Same->count;
         size_same += Re_Same->sum_size;
-        movequeue(Wr_Same, Re_Same);
+        if(Re_Same->head->next != NULL)
+            movequeue(Wr_Same, Re_Same);
         /*
         Re_Same->head->next = NULL;
         Re_Same->tail = Re_Same->head;
@@ -210,6 +213,7 @@ void rearrange(int n_child, int n_diff, void *src)
     
     //}  
     //re_deinit();
+    /*
     printf("===== Rearrange Result =====\n");
     for(i=0; i<n_child; i++)
     {
@@ -219,12 +223,17 @@ void rearrange(int n_child, int n_diff, void *src)
     printf("=== Same [%lld byte] ===\n", size_same);
     printf("Total %d files.\n", count_same);
     printf("\n\n", count_same);
-    printf("===== Rearrange Result222222 =====\n");
+    */
+    printf("\n\n===== Rearrange Result =====\n");
     for(i=0; i<n_child; i++)
     {
         printf("=== Child [%lld byte] ===\n", Wr_Child[i]->sum_size);
         printf("Total %d files.\n", Wr_Child[i]->count);
+        Child[i]->sum_size = Wr_Child[i]->sum_size;
+        Child[i]->count = Wr_Child[i]->count;
     }
     printf("=== Same [%lld byte] ===\n", Wr_Same->sum_size);
     printf("Total %d files.\n", Wr_Same->count);
+    Same->sum_size = Wr_Same->sum_size;
+    Same->count = Wr_Same->count;
 }

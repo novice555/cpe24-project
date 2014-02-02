@@ -39,7 +39,7 @@ void read_file(int child, void *src)
         sprintf(readname, "%s%02d/list/static.file", CHILD_PATH, i+1);
         read(Child[i], readname);
     }
-    sprintf(readname, "%s/list/dynamic.file", PARENT_PATH, i+1);
+    sprintf(readname, "%slist/dynamic.file", PARENT_PATH, i+1);
     read(Same, readname);
     
 }

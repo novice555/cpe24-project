@@ -32,7 +32,11 @@ void first_group_list(int child, void *src, void *re_src)
     int i;
     int check;
 
-    strcpy(tmp_path, Child[0]->head->next->src_path);
+    if(Child[0]->head->next!=NULL)
+        strcpy(tmp_path, Child[0]->head->next->src_path);
+    else
+        strcpy(tmp_path, Same->head->next->src_path);
+        
     for(i=0; i<child; i++)
         extract(Child[i], Re_Child[i], tmp_path);
     extract(Same, Re_Same, tmp_path);
@@ -42,13 +46,13 @@ void first_group_list(int child, void *src, void *re_src)
         fprintf(stderr, "Cannot group file list: Same->count = 0.\n");
         exit(1);
     }
-    */
+    
     for(i=0; i<child; i++)
     {
         if(!Re_Child[i]->count)
             fprintf(stderr, "Cannot group file list: Child[%d]->count = 0.\n", i+1);
     }
- 
+ */
 
     
 }
