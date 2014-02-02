@@ -38,17 +38,12 @@ $result = file($resultpath, FILE_IGNORE_NEW_LINES);
     </div>
 </div>
 <div class="row">
-    <div>
-        <table class="table table-bordered" style="width: 100%; table-layout:fixed;">
-        <thead>
+    <div class="col-md-6" style="bordr">
+        <table class="table table-bordered">
+    
+        <tr><td><?php echo $cmp['Diff']['name']; ?></td></tr>
         <tr>
-            <th><?php echo $cmp['Diff']['name']; ?></th>
-            <th><?php echo $cmp['Diff']['samename']; ?></th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-        <td style="word-wrap: break-word;">
+        <td>
     <?php 
     $m = count($result);
     $n = count($src);
@@ -113,7 +108,14 @@ $result = file($resultpath, FILE_IGNORE_NEW_LINES);
 
     ?>
         </td>
-        <td style="word-wrap: break-word;">
+        </tr>
+        </table>
+    </div>
+    <div class="col-md-6">
+        <table class="table table-bordered">
+        <tr><td><?php echo $cmp['Diff']['samename']; ?></td></tr>
+        <tr>
+        <td>
     <?php 
     $m = count($result);
     $n = count($same);
@@ -142,7 +144,6 @@ $result = file($resultpath, FILE_IGNORE_NEW_LINES);
     ?>
         </td>
         </tr>
-        </tbody>
         </table>
     </div>
 </div>

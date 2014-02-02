@@ -1,11 +1,17 @@
-<h2>Test Index</h2>
+<h2>Distributed Computing</h2>
+Data Detail
+<?php echo $this->Html->link('', array('action' => 'detail'), array('class' => 'glyphicon glyphicon-link')); ?>
+<br />
+<br />
+<h4>Compare File</h4>
 <?php
 echo $this->Form->create('Diff', array(
+    'role' => 'form',
     'enctype' => 'multipart/form-data',
     'controller' => 'diff',
     'action' => 'upload',
     'inputDefaults' => array('class' => 'form-control'),
-    'class' => 'form-inline'));
+    'class' => 'form-inline well'));
 
 //echo $this->Form->input('keyword', array('label' => false));
 echo $this->Html->div(
@@ -45,7 +51,7 @@ echo $this->Form->end('Submit');
         <td><?php echo $i['Diff']['created']?></td>
         <td>
             <?php 
-            if($i['Diff']['finished'] == true) {
+            if($i['Diff']['status'] == 0) {
 /*
                 echo $this->Form->button('Result', array(
                     'onclick' => 'window.open(\'view/'.$i['Diff']['id'].'\')'
@@ -56,6 +62,12 @@ echo $this->Form->end('Submit');
                     array('action' => 'view', $i['Diff']['id']),
                     array('class' => 'glyphicon glyphicon-edit', 'target' => '_blank')
                 ); 
+            } else if($i['Diff']['status'] == 1) {
+                echo "In Queue";
+            } else if($i['Diff']['status'] == 2) {
+                echo "Process";
+            } else if($i['Diff']['status'] == 3) {
+                echo "Error";
             } else {
                 echo "N/A";
             }

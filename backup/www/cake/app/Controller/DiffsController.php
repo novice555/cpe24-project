@@ -2,13 +2,16 @@
 class DiffsController extends AppController {
 //    public $helpers = array('Html', 'Form');
     public function index() {
-        $this->set('diff', $this->Diff->find('all', array('order' => array('id' => 'desc'))));
+        $this->set('diff', $this->Diff->find('all', array('order' => array('Diff.id' => 'desc'))));
+    }
+    public function detail() {
+
     }
 
-    private function test($cmd) {
+    private function test() {
         $time_start = microtime(true);
-		$this->Session->setFlash(__($cmd));
-        $output = shell_exec('sudo /koppae/queue_dsd.sh "'.$cmd.'" >> /tmp/logdsd.txt &');
+		//$this->Session->setFlash(__($cmd));
+        $output = shell_exec('sudo -H /koppae/queue_dsd.sh >> /tmp/logdsd.txt &');
         $time_end = microtime(true);
         $time = $time_end - $time_start;
         return $time;
@@ -31,14 +34,13 @@ class DiffsController extends AppController {
             $file = $this->request->data['Diff']['submittedfile'];
             if($file['error'] === UPLOAD_ERR_OK) {
                 $id = String::uuid();
-                if(move_uploaded_file($file['tmp_name'], '/koppae/working/'.'uploads'.DS.$id)) {
+                if(move_uploaded_file($file['tmp_name'], '/koppae/working/uploads/'.$id.'.upload')) {
 //                  $this->set('temp', $this->Post->create());
                     $this->Diff->create();
                     $this->request->data['Diff']['name'] = $file['name'];
-                    $this->request->data['Diff']['filename'] = APP.'uploads'.DS.$id;
-                    $this->request->data['Diff']['filesame'] = "";
-                    $this->request->data['Diff']['finished'] = false;
-                    $this->request->data['Diff']['result'] = "";
+                    $this->request->data['Diff']['filename'] = $id;
+                    //$this->request->data['Diff']['samename'] = $id;
+                    $this->request->data['Diff']['status'] = 1;
                     $typesin = trim(
                         $this->request->data['Diff']['type'],
                         " \t\n\r\0\x0B"
@@ -46,15 +48,22 @@ class DiffsController extends AppController {
                     if($typesin=='') {
                         $typesin = "all";
                     }    
-
+                    $this->request->data['Diff']['type'] = $typesin;
+                    
                     if($this->Diff->save($this->request->data)) {
-                        //$this->Session->setFlash(__('Upload Complete.'));
-                        $this->test(APP.'uploads'.DS.$id.' '.$typesin);
-                        return $this->redirect(array('action' => 'index'));
-                    } else {
-                        $this->Session->setFlash(__('Cannot add file to database.'));
-                        return $this->redirect(array('action' => 'index'));
+                        $this->request->data['Queue']['diff_id'] = $this->Diff->id;
+                        $this->request->data['Queue']['diff_filename'] =
+                            $this->request->data['Diff']['filename'];
+                        $this->request->data['Queue']['diff_type'] = 
+                            $this->request->data['Diff']['type'];
+                        if($this->Diff->Queue->save($this->request->data)) {
+                            //$this->Session->setFlash(__('Upload Complete.'));
+                            $this->test();
+                            return $this->redirect(array('action' => 'index'));
+                        }
                     }
+                    $this->Session->setFlash(__('Cannot add file to database.'));
+                    return $this->redirect(array('action' => 'index'));
                 }
             }
         }
