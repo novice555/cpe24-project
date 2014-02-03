@@ -28,6 +28,25 @@ class DiffsController extends AppController {
         }
         $this->set('cmp', $cmp);
     }
+    
+    public function updatestat()
+    {
+        if($this->request->is('get'))
+        {
+            $listed = $this->Diff->query("SELECT `diff`.`id`, `diff`.`status` FROM `diff` ORDER BY `diff`.`id` DESC", $cachequeries = false);
+            $newlist = array();
+            
+            foreach($listed as $i) {
+                $newlist[$i['diff']['id']] = $i['diff']['status'];
+            }
+            
+            //$this->set('diffs', $listed);
+            //$this->set('_serialize', array('diffs'));
+            return new CakeResponse(array('body' => json_encode($newlist)));
+            //$this->set('_serialize', array('posts'));
+    
+        }
+    }
 
     public function upload() {
         if($this->request->is('post')) {

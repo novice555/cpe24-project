@@ -34,7 +34,9 @@ echo $this->Form->end('Submit');
             <th>FileSame</th>
             <th>Result</th>
             */ ?>
+            <th>Type Search</th>
             <th>created</th>
+            <th>Similarity</th>
             <th>Result</th>
         </tr>
     </thead>
@@ -48,8 +50,17 @@ echo $this->Form->end('Submit');
         <td><?php echo $i['Diff']['filesame']?></td>
         <td><?php echo $i['Diff']['result']?></td>
         */ ?>
+        <td><?php echo $i['Diff']['type']?></td>
         <td><?php echo $i['Diff']['created']?></td>
         <td>
+        <?php 
+            if($i['Diff']['percent'] != null)
+                echo $i['Diff']['percent'].'%';
+            else
+                echo 'N/A';
+        ?>
+        </td>
+        <td id="<?php echo $i['Diff']['id']; ?>">
             <?php 
             if($i['Diff']['status'] == 0) {
 /*
@@ -73,9 +84,12 @@ echo $this->Form->end('Submit');
             }
             
             ?>
-        <td>
+        </td>
+
     </tr>
     <?php endforeach;?>
     <?php unset($i);?>
     </tbody>
 </table>
+<?php echo $this->Html->script('check'); ?>
+

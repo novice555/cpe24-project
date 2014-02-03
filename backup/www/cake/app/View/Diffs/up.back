@@ -1,0 +1,5 @@
+<?php
+print_r($list);
+echo '<br /><br />';
+echo json_encode($list);
+?>

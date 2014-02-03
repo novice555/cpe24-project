@@ -59,7 +59,17 @@ else
         then
             filesame=`cat $outfile | head -n1`
             percent=`cat $outfile | head -n2 | tail -n1`
-            cat $outfile | tail -n+3 > $outpath/$filename.result
+            #cat $outfile | tail -n+3 > $outpath/$filename.result
+            a=$(diff $inpath/$filename.upload $filesame)
+            if [ -n "$a" ]
+            then
+                diff -iEbwBu1000000 $inpath/$filename.upload $filesame | grep '^ ' | sed 's/    ^ //' > $outpath/$filename.re1
+                diff -iEbwBu1000000 $filesame $inpath/$filename.upload | grep '^ ' | sed 's/    ^ //' > $outpath/$filename.re2
+            else
+                
+                cp $inpath/$filename.upload $outpath/$filename.re1
+                cp $inpath/$filename.upload $outpath/$filename.re2
+            fi
             #fileresult=`< /dev/urandom tr -dc A-Za-z0-9 | head -c10`
             #aout=$($outfile | tail -n+4)
             #if [ -n "$aout" ]
